@@ -1,3 +1,40 @@
 {
-  "extends": "next/core-web-vitals"
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "next/core-web-vitals",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    // Add your custom rules here
+    "@typescript-eslint/no-unused-vars": "warn"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__test(s)__/*.{j,t}s?(x)",
+        "**/*.spec.{j,t}s?(x)",
+        "**/*.test(s).{j,t}s?(x)"
+      ],
+      "env": {
+        "jest": true
+      },
+      "extends": [
+        "plugin:vitest/recommended",
+        "plugin:jest-dom/recommended",
+        "plugin:testing-library/react"
+      ],
+      "plugins": ["vitest", "jest-dom", "testing-library"],
+      "rules": {
+        "vitest/expect-expect": "off" // eliminate
+      },
+      "settings": {
+        "vitest": {
+          "typecheck": true
+        }
+      }
+    }
+  ]
 }
