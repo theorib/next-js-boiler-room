@@ -43,7 +43,7 @@ async function resolveElement(ui: ReactNode) {
   }
 }
 
-function isAsyncComponent(ui: unknown): ui is ReactElement {
+export function isAsyncComponent(ui: unknown): ui is ReactElement {
   if (isReactElement(ui)) {
     // Check if the component type has an async signature
     const isAsyncFunction =
@@ -53,7 +53,7 @@ function isAsyncComponent(ui: unknown): ui is ReactElement {
   return false;
 }
 
-const isReactElement = (element: unknown): element is ReactElement => {
+export const isReactElement = (element: unknown): element is ReactElement => {
   return (
     typeof element === 'object' &&
     element !== null &&
@@ -61,7 +61,7 @@ const isReactElement = (element: unknown): element is ReactElement => {
   );
 };
 
-const isFunctionComponent = (
+export const isFunctionComponent = (
   element: unknown,
 ): element is FunctionComponent => {
   return (

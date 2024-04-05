@@ -3,11 +3,24 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-import mockedNextFonts from './mockedNextFonts';
+import mockNextImage from './mockNextImage';
+import mockNextFont from './mockNextFont';
+
+// import mockServerOnly from './mockServerOnly';
 
 beforeAll(() => {
-  // All your beforeAll code here
-  mockedNextFonts();
+  vi.mock('next/image', () => mockNextImage);
+  vi.mock(`next/font/google`, async () => {
+    const actual =
+      await vi.importActual<typeof import('next/font/google')>(
+        'next/font/google',
+      );
+    console.log('actual', actual);
+
+    return mockNextFont('Inter');
+  });
+
+  // mockServerOnly();
 });
 
 beforeEach(() => {

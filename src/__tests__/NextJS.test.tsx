@@ -1,5 +1,7 @@
 // import { screen } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+
+import { render, screen } from '@testing-library/react';
+// import { waitFor } from '@testing-library/react';
 import MockPageSync from '@/app/mock-page-sync/page';
 import renderAsync from '@/testUtils/renderServerComponents';
 import MockPageAsync from '@/app/mock-page-async/page';
@@ -7,32 +9,93 @@ import RootLayout from '@/app/layout';
 import { Suspense } from 'react';
 import MockPageClient from '@/app/mock-page-client/page';
 import MockPageAsyncChildAsync from '@/app/mock-page-async-child-async/page';
-vi.mock('server-only', () => ({}));
+import PageNextImage from '@/app/page-next-image/page';
+import NextLinkPage from '@/app/page-next-link/page';
+
+beforeAll(() => {
+  //
+});
+
+describe('Testing NextJS Functions', () => {
+  test('next/link', () => {
+    render(
+      <Suspense>
+        <NextLinkPage />
+      </Suspense>,
+    );
+    // screen.debug();
+    const link = screen.getByRole('link', { name: /NextLinkPage/i });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/');
+  });
+  test('Server component with next/image', async () => {
+    render(
+      <Suspense>
+        <PageNextImage />
+      </Suspense>,
+    );
+
+    const heading = await screen.findByRole('heading', {
+      name: /PageNextImage/i,
+    });
+
+    const image = screen.getByRole('img', { name: /theo ribeiro portrait/i });
+
+    expect(heading).toBeInTheDocument();
+    expect(image).toBeInTheDocument();
+  });
+});
 
 describe('tests with nested components', () => {
-  test.skip('Test MockPageAsyncChildAsync', async () => {
-    // const results = await MockPageAsyncChildAsync();
-    const results = waitFor(MockPageAsyncChildAsync);
-    render(results);
-    // render(await MockPageAsyncChildAsync());
-
-    // const heading = screen.getByRole('heading', {
-    //   name: /i am MockPageAsyncChildAsync/i,
-    // });
-    // expect(heading).toBeInTheDocument();
-  });
   test('Another MockPageAsyncChildAsync ', async () => {
     render(
+      <Suspense>
+        <RootLayout>
+          <MockPageAsyncChildAsync />
+        </RootLayout>
+      </Suspense>,
+    );
+
+    const headingOne = await screen.findByRole('heading', {
+      name: /MockPageAsyncChildAsync/i,
+    });
+    const clientComponent = screen.getByRole('heading', {
+      name: /ClientComponent/i,
+    });
+    const serverComponentAsyncOne = screen.getByRole('heading', {
+      name: /ServerComponentAsyncOne/i,
+    });
+    const serverComponentAsyncTwo = screen.getByRole('heading', {
+      name: /ServerComponentAsyncTwo/i,
+    });
+    // screen.debug();
+    expect(headingOne).toBeInTheDocument();
+    expect(clientComponent).toBeInTheDocument();
+    expect(serverComponentAsyncOne).toBeInTheDocument();
+    expect(serverComponentAsyncTwo).toBeInTheDocument();
+  });
+
+  test('MockPageAsyncChildAsync with custom renderer', async () => {
+    renderAsync(
       <Suspense>
         <MockPageAsyncChildAsync />
       </Suspense>,
     );
-    // const results = await MockPageAsync();
-    // render(results);
+
     const heading = await screen.findByRole('heading', {
-      name: /i am the mock page async/i,
+      name: /MockPageAsyncChildAsync/i,
     });
     expect(heading).toBeInTheDocument();
+  });
+
+  test('Test MockPageAsyncChildAsync', async () => {
+    // const results = await MockPageAsyncChildAsync();
+    // const results = waitFor(MockPageAsyncChildAsync);
+    // render(results);
+    // const heading = await screen.findByRole('heading', {
+    //   name: /I am MockPageAsyncChildAsync/i,
+    // });
+    // expect(heading).toBeInTheDocument();
   });
 });
 
@@ -61,7 +124,7 @@ describe('Testing native render function', () => {
   });
 });
 
-describe.skip('Testing Custom Render Function', () => {
+describe('Testing Custom Render Function', () => {
   test('Test MockPageAsyncChildAsync', async () => {
     await renderAsync(
       <Suspense>
@@ -94,7 +157,7 @@ describe.skip('Testing Custom Render Function', () => {
   });
 
   test('Test RootLayout', async () => {
-    const { container, debug } = await render(
+    await render(
       <RootLayout>
         <h1>Layout</h1>
       </RootLayout>,

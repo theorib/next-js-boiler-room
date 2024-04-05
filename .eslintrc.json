@@ -28,7 +28,9 @@
       ],
       "plugins": ["vitest", "jest-dom", "testing-library"],
       "rules": {
-        "vitest/expect-expect": "off" // eliminate
+        "vitest/expect-expect": "off", // eliminate
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off"
       },
       "settings": {
         "vitest": {

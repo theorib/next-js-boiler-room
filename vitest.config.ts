@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 // If you are using TypeScript, this give vite the ability to resolve imports using TypeScript's path mapping.
 import tsconfigPaths from 'vite-tsconfig-paths';
 
