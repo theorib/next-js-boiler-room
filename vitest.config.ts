@@ -18,5 +18,9 @@ export default defineConfig({
     // alias: {
     //   '@/': new URL('./src/', import.meta.url).pathname,
     // },
+    coverage: {
+      provider: 'v8',
+      reporter: ['html'],
+    },
   },
 });
