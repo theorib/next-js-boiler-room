@@ -7,6 +7,7 @@ import RootLayout from '@/app/layout';
 import { Suspense } from 'react';
 import MockPageClient from '@/app/mock-page-client/page';
 import MockPageAsyncChildAsync from '@/app/mock-page-async-child-async/page';
+vi.mock('server-only', () => ({}));
 
 describe('tests with nested components', () => {
   test.skip('Test MockPageAsyncChildAsync', async () => {
@@ -20,18 +21,18 @@ describe('tests with nested components', () => {
     // });
     // expect(heading).toBeInTheDocument();
   });
-  test('Another MockPageAsync with a different syntax', async () => {
+  test('Another MockPageAsyncChildAsync ', async () => {
     render(
       <Suspense>
-        <MockPageAsync />
+        <MockPageAsyncChildAsync />
       </Suspense>,
     );
     // const results = await MockPageAsync();
     // render(results);
-    // const heading = screen.getByRole('heading', {
-    //   name: /i am the mock page async/i,
-    // });
-    // expect(heading).toBeInTheDocument();
+    const heading = await screen.findByRole('heading', {
+      name: /i am the mock page async/i,
+    });
+    expect(heading).toBeInTheDocument();
   });
 });
 
