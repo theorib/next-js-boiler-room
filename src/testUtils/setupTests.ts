@@ -2,7 +2,7 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import mockNextImage from './mockNextImage';
 import mockNextFont from './mockNextFont';
 
@@ -10,17 +10,7 @@ import mockNextFont from './mockNextFont';
 
 beforeAll(() => {
   vi.mock('next/image', () => mockNextImage);
-  vi.mock(`next/font/google`, async () => {
-    const actual =
-      await vi.importActual<typeof import('next/font/google')>(
-        'next/font/google',
-      );
-    console.log('actual', actual);
-
-    return mockNextFont('Inter');
-  });
-
-  // mockServerOnly();
+  vi.mock(`next/font/google`, () => mockNextFont('Inter'));
 });
 
 beforeEach(() => {
