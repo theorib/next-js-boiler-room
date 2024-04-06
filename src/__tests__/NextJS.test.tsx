@@ -1,6 +1,5 @@
-// import mockNextFont from '@/testUtils/mockNextFont';
-import mockNextFont from '@/testUtils/mockNextFont';
-mockNextFont(['Rubik_Scribble', 'Inter']);
+// import mockNextFont from './mockNextFont';
+// mockNextFont(['Rubik_Scribble', 'Inter']);
 
 // import mockNextFontOld from '@/testUtils/mockNextFontOld';
 // vi.mock(`next/font/google`, () => mockNextFontOld(['Rubik_Scribble', 'Inter']));
