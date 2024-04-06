@@ -7,10 +7,11 @@ import mockNextImage from './mockNextImage';
 import mockNextFont from './mockNextFont';
 
 // import mockServerOnly from './mockServerOnly';
-
+// mockNextFont(['Rubik_Scribble']);
+// mockNextFont(['Inter', 'Rubik_Scribble']);
 beforeAll(() => {
-  vi.mock('next/image', () => mockNextImage);
-  vi.mock(`next/font/google`, () => mockNextFont('Inter'));
+  mockNextImage();
+  // vi.mock(`next/font/google`, () => mockNextFont('Inter'));
 });
 
 beforeEach(() => {

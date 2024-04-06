@@ -93,17 +93,22 @@ function MockNextImage({
 }
 
 /**
- * Mocks the `next/image` component for use in test environments.
- * Usage:
- * vi.mock('next/image', () => mockNextImage);
+ * Mocks the behavior of the `next/image` component for testing purposes.
+ *
+ * This function is used to set up a mock for the `next/image` component in test environments. It uses the `vi.hoisted()` function from the Vitest testing framework to create a mock that returns the `MockNextImage` component instead of the actual `next/image` component.
+ *
+ * @returns A function that can be called to set up the mock for the `next/image` component.
  */
-const mockNextImage = vi.hoisted(
-  (): ESModuleDefault<ComponentType<ImageProps>> => {
+const mockNextImage = vi.hoisted(() => {
+  vi.doMock('next/image', (): ESModuleDefault<ComponentType<ImageProps>> => {
     return {
       __esModule: true,
       default: MockNextImage,
     };
-  },
-);
+  });
+  return (): void => {
+    // a void return is needed so that mockNextImage can be called to execute the mock
+  };
+});
 
 export default mockNextImage;
