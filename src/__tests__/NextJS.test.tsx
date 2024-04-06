@@ -1,21 +1,30 @@
-// import { screen } from '@testing-library/react';
+// import mockNextFont from '@/testUtils/mockNextFont';
+import mockNextFont from '@/testUtils/mockNextFont';
+mockNextFont(['Rubik_Scribble', 'Inter']);
 
+// import mockNextFontOld from '@/testUtils/mockNextFontOld';
+// vi.mock(`next/font/google`, () => mockNextFontOld(['Rubik_Scribble', 'Inter']));
+
+import RootLayout from '@/app/layout';
+import PageNextFontSingle from '@/app/page-next-font-single/page';
+
+//
 import { render, screen } from '@testing-library/react';
 // import { waitFor } from '@testing-library/react';
 import MockPageSync from '@/app/mock-page-sync/page';
 import renderAsync from '@/testUtils/renderServerComponents';
 import MockPageAsync from '@/app/mock-page-async/page';
-import RootLayout from '@/app/layout';
 import { Suspense } from 'react';
 import MockPageClient from '@/app/mock-page-client/page';
 import MockPageAsyncChildAsync from '@/app/mock-page-async-child-async/page';
 import PageNextImage from '@/app/page-next-image/page';
 import NextLinkPage from '@/app/page-next-link/page';
-import mockNextFont from '@/testUtils/mockNextFont';
-import PageNextFontSingle from '@/app/page-next-font-single/page';
 
 beforeAll(() => {
   //
+  // vi.mock(`next/font/google`, () =>
+  //   mockNextFontOld(['Rubik_Scribble', 'Inter']),
+  // );
 });
 describe.only('Testing NextJS Functions', () => {
   test.only('NextJS Mock Font Single', () => {

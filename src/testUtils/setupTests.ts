@@ -5,13 +5,12 @@
 import '@testing-library/jest-dom/vitest';
 import mockNextImage from './mockNextImage';
 import mockNextFont from './mockNextFont';
-
+import mockNextFontOld from './mockNextFontOld';
 // import mockServerOnly from './mockServerOnly';
 // mockNextFont(['Rubik_Scribble']);
 // mockNextFont(['Inter', 'Rubik_Scribble']);
 beforeAll(() => {
   mockNextImage();
-  // vi.mock(`next/font/google`, () => mockNextFont('Inter'));
 });
 
 beforeEach(() => {

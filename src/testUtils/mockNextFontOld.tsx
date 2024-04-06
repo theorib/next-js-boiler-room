@@ -68,18 +68,13 @@ function createFontModuleMultiple(fontNames: string[]): FontModule {
  * @param fontName - The name of the font to be mocked, or an array of font names.
  * @returns A function that returns a mocked `FontModule` object.
  */
-const mockNextFont = vi.hoisted(() => {
+const mockNextFontOld = vi.hoisted(() => {
   const createMockedFontModules = function (fontNames: string | string[]) {
-    let fontModule: FontModule;
-    if (typeof fontNames === 'string') fontModule = createFontModule(fontNames);
-    if (Array.isArray(fontNames)) fontModule = createFontModules(fontNames);
-    vi.doMock(`next/font/google`, () => fontModule);
-
-    // if (typeof fontNames === 'string') return createFontModuleSingle(fontNames);
-    // if (Array.isArray(fontNames)) return createFontModuleMultiple(fontNames);
+    if (typeof fontNames === 'string') return createFontModuleSingle(fontNames);
+    if (Array.isArray(fontNames)) return createFontModuleMultiple(fontNames);
   };
 
   return createMockedFontModules;
 });
 
-export default mockNextFont;
+export default mockNextFontOld;
