@@ -94,21 +94,22 @@ function MockNextImage({
 
 /**
  * Mocks the behavior of Next.js `next/image` component for testing purposes.
- * Used for testing with React Testing Library and Vitest.
+ * Used for testing with React Testing Library and Vitest.testing framework to create a mock that returns the `MockNextImage` component instead of the actual `next/image` component.
  *
- * Usage: vi.mock(`next/font/google`, () => mockNextImage);
+ * Usage: mockNextImage()
  *
- * IMPORTANT: when using mockNextImage don't call it but pass it as the return value of the vi.mock function.
- * IMPORTANT: this module needs to be imported BEFORE the module that uses the next/image component.
- *
- * @returns A function that can be returned from a vi.mock() call to set up a mock for the `next/image` component.
+ * @returns A function that can be called to set up the mock for the `next/image` component.
  */
-const mockNextImage = vi.hoisted(
-  (): ESModuleDefault<ComponentType<ImageProps>> => {
+const mockNextImageWithDoMock = vi.hoisted(() => {
+  vi.doMock('next/image', (): ESModuleDefault<ComponentType<ImageProps>> => {
     return {
       __esModule: true,
       default: MockNextImage,
     };
-  },
-);
-export default mockNextImage;
+  });
+  return (): void => {
+    // a void return is needed so that mockNextImage can be called to execute the mock
+  };
+});
+
+export default mockNextImageWithDoMock;

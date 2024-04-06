@@ -1,12 +1,12 @@
 import ClientComponent from '@/components/ClientComponent';
 import ServerComponentAsyncOne from '@/components/ServerComponentAsyncOne';
 
-export default async function MockPageAsyncChildAsync() {
+export default async function PageAsyncServerComponentWithChildren() {
   // const portfolio = await portfolioActions.getPortfolioItems();
 
   return (
     <>
-      <h1>MockPageAsyncChildAsync</h1>
+      <h1>PageAsyncServerComponentWithChildren</h1>
       <ClientComponent />
       <ServerComponentAsyncOne />
     </>
