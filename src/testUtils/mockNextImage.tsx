@@ -96,7 +96,7 @@ function MockNextImage({
  * Mocks the behavior of Next.js `next/image` component for testing purposes.
  * Used for testing with React Testing Library and Vitest.
  *
- * Usage: vi.mock(`next/font/google`, () => mockNextImage);
+ * Usage: vi.mock(`next/image`, () => mockNextImage);
  *
  * IMPORTANT: when using mockNextImage don't call it but pass it as the return value of the vi.mock function.
  * IMPORTANT: this module needs to be imported BEFORE the module that uses the next/image component.

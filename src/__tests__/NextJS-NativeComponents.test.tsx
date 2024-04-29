@@ -5,6 +5,7 @@ import PageNextFontMultiple from '@/app/page-next-font-multiple/page';
 import PageNextImageSingle from '@/app/page-next-image-single/page';
 import PageNextImageMultiple from '@/app/page-next-image-multiple/page';
 import PageNextLinkSingle from '@/app/page-next-link-single/page';
+import PageNextLinkMultiple from '@/app/page-next-link-multiple/page';
 
 describe('next/image', () => {
   test('Server component with Single next/image', async () => {
@@ -80,5 +81,27 @@ describe('next/link', () => {
     const link = screen.getByRole('link', { name: /PageNextLinkSingle/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', '/');
+  });
+
+  test('next/link Multiple', () => {
+    render(
+      <Suspense>
+        <PageNextLinkMultiple />
+      </Suspense>,
+    );
+    const heading = screen.getByRole('heading', {
+      name: /PageNextLinkMultiple/i,
+    });
+    expect(heading).toBeInTheDocument();
+
+    const linkOne = screen.getByRole('link', { name: /PageNextImageSingle/i });
+    expect(linkOne).toBeInTheDocument();
+    expect(linkOne).toHaveAttribute('href', '/page-next-image-single');
+
+    const linkTwo = screen.getByRole('link', {
+      name: /PageNextImageMultiple/i,
+    });
+    expect(linkTwo).toBeInTheDocument();
+    expect(linkTwo).toHaveAttribute('href', '/page-next-image-multiple');
   });
 });

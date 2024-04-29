@@ -56,7 +56,7 @@ function createFontModuleMultiple(fontNames: string[]): FontModule {
  * Used to create mock font modules for testing files that uses Next.js `next/font/google` module.
  * Used for testing with React Testing Library and Vitest.
  *
- * Usage Example: vi.mock(`next/font/google`, () => mockNextFont(['Rubik_Scribble', 'Inter']));
+ * Usage Example: vi.mock(`next/font/google`, () => mockNextFontGoogle(['Rubik_Scribble', 'Inter']));
  * IMPORTANT: this module needs to be imported BEFORE the module that uses the next/font/google component.
  *
  * @param fontNames - The font names to create the mocked font module for. Can be a single string or an array of strings.

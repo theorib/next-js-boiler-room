@@ -39,7 +39,7 @@ describe('Components with native Render', () => {
   });
 
   test('MockPageAsyncChildAsync with custom renderer', async () => {
-    renderAsync(
+    await renderAsync(
       <Suspense>
         <PageAsyncServerComponentWithChildren />
       </Suspense>,

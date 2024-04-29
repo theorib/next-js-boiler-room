@@ -1,5 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["tsconfig.json"] //necessary to use "@typescript-eslint/no-floating-promises"
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -8,8 +11,8 @@
   ],
   "plugins": ["@typescript-eslint"],
   "rules": {
-    // Add your custom rules here
-    "@typescript-eslint/no-unused-vars": "warn"
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-floating-promises": "error"
   },
   "overrides": [
     {
@@ -18,24 +21,24 @@
         "**/*.spec.{j,t}s?(x)",
         "**/*.test(s).{j,t}s?(x)"
       ],
+      "settings": {
+        "vitest": {
+          "typecheck": true
+        }
+      },
       "env": {
         "jest": true
       },
+      "plugins": ["vitest", "jest-dom", "testing-library"],
       "extends": [
         "plugin:vitest/recommended",
         "plugin:jest-dom/recommended",
         "plugin:testing-library/react"
       ],
-      "plugins": ["vitest", "jest-dom", "testing-library"],
       "rules": {
         "vitest/expect-expect": "off", // eliminate
         "@typescript-eslint/no-unused-vars": "off",
         "no-unused-vars": "off"
-      },
-      "settings": {
-        "vitest": {
-          "typecheck": true
-        }
       }
     }
   ]
