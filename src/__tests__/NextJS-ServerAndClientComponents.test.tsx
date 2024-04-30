@@ -44,7 +44,7 @@ describe('Components with native Render', () => {
         <PageAsyncServerComponentWithChildren />
       </Suspense>,
     );
-
+    
     const heading = await screen.findByRole('heading', {
       name: /PageAsyncServerComponentWithChildren/i,
     });
