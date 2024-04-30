@@ -13,9 +13,12 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "next": "14.2.3",
     "react": "18.3.0-canary-c3048aab4-20240326",
-    "react-dom": "18.3.0-canary-c3048aab4-20240326"
+    "react-dom": "18.3.0-canary-c3048aab4-20240326",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",

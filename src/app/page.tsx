@@ -1,7 +1,18 @@
+import Image from 'next/image';
+import landOfTheWind from 'public/img/land-of-the-wind.jpg';
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>I am the home page</h1>
-    </main>
+    <>
+      <h1 className="font-raleway mb-2 text-5xl">I am the home page</h1>
+      <Image
+        src={landOfTheWind}
+        width={720}
+        height={320}
+        alt="land of the wind"
+        className="object-cover object-center"
+        sizes="50vw"
+      />
+      <button className="btn">Click Me</button>
+    </>
   );
 }

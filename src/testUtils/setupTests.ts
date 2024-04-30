@@ -11,9 +11,7 @@ mockNextFont(['Rubik_Scribble', 'Inter']);
 
 beforeAll(() => {
   vi.mock('next/image', () => mockNextImage);
-  vi.mock(`next/font/google`, () =>
-    mockNextFont(['Rubik_Scribble', 'Inter', 'Audiowide', 'Lobster']),
-  );
+  vi.mock(`next/font/google`, () => mockNextFont(['Raleway']));
 });
 
 beforeEach(() => {
