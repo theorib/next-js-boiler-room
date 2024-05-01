@@ -18,6 +18,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".", // Allows for Absolute imports https://nextjs.org/docs/pages/building-your-application/configuring/absolute-imports-and-module-aliases
     "paths": {
       "@/*": ["./src/*"],
       "public/*": ["./public/*"]
