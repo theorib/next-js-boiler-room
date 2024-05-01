@@ -1,4 +1,3 @@
-import OneComp from '@/components/OneComp';
 import Image from 'next/image';
 import landOfTheWind from 'public/img/land-of-the-wind.jpg';
 export default function HomePage() {
