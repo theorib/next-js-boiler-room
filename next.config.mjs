@@ -2,7 +2,7 @@
 const nextConfig = {
   // we will handle errors with git action hooks
   typescript: {
-    ignoreDevErrors: true,
+    ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
