@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { raleway } from '@/lib/fonts';
+import env from '@/lib/env';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
