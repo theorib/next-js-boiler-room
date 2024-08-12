@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { vi } from 'vitest';
 
 /**
@@ -6,7 +7,7 @@ import { vi } from 'vitest';
  */
 interface FontModule {
   [fontName: string]: () => {
-    style: React.CSSProperties;
+    style: CSSProperties;
     className: string;
     variable: string;
   };
