@@ -1,64 +1,89 @@
-// @ts-check
-
-import { FlatCompat } from '@eslint/eslintrc';
 import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import { Linter } from 'eslint';
 import jestDom from 'eslint-plugin-jest-dom';
 import testingLibrary from 'eslint-plugin-testing-library';
 import vitest from 'eslint-plugin-vitest';
+import pluginNext from '@next/eslint-plugin-next';
+import reactPlugin from 'eslint-plugin-react';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactCompiler from 'eslint-plugin-react-compiler';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+// import eslintConfigNext from 'eslint-config-next';
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-  recommendedConfig: eslint.configs.recommended,
-});
+const JSX_FILE_PATTERNS = ['**/*.{j,t,mj,mt,cj,ct}s?(x)'];
+const TEST_FILE_PATTERNS = [
+  '**/__test(s)__/*.{j,t,mj,mt,cj,ct}s?(x)',
+  '**/__test(s)__/*.cjs',
+  '**/*.spec.{j,t,mj,mt,cj,ct}s?(x)',
+  '**/*.test(s).{j,t,mj,mt,ct,ct}s?(x)',
+];
 
-const nextConfig = compat.config({
-  extends: [
-    // 'eslint:recommended',
-    'next/core-web-vitals',
-    'next/typescript',
-    // 'prettier',
-  ],
-  // extends: [
-  // 'eslint:recommended',
-  // 'next',
-  // 'next/typescript',
-  // 'prettier',
-  // ],
-});
-
-const compilerConfig = compat.config({
-  plugins: ['react-compiler'],
-  rules: {
-    'react-compiler/react-compiler': 'error',
-  },
-});
+const IGNORE_PATTERNS = [
+  '.next/**',
+  'node_modules',
+  'node_modules/**',
+  'dist/**',
+  'coverage/**',
+  '*.config.js',
+  '*.config.mjs',
+  '*.config.cjs',
+];
 
 /** @type {import('eslint').Linter.Config} */
-const ignoreConfig = {
-  ignores: [
-    '.next/**',
-    'node_modules',
-    'node_modules/**',
-    'dist/**',
-    'coverage/**',
-    '*.config.js',
-    '*.config.mjs',
-    '*.config.cjs',
-  ],
+const eslintPluginReactcompiler = {
+  name: 'eslint-plugin-react-compiler',
+  ...reactCompiler.configs.recommended,
 };
 
 /** @type {import('eslint').Linter.Config} */
-const testingConfig = {
-  files: [
-    '**/__test(s)__/*.{j,t}s?(x)',
-    '**/*.spec.{j,t}s?(x)',
-    '**/*.test(s).{j,t}s?(x)',
-  ],
-  ignores: ignoreConfig.ignores,
+const eslintPluginReactRecommended = {
+  name: 'eslint-plugin-react-recommended',
+  files: [...JSX_FILE_PATTERNS],
+  ...reactPlugin.configs.flat.recommended,
+  languageOptions: {
+    globals: {
+      ...globals.serviceworker,
+      ...globals.browser,
+    },
+    ...reactPlugin.configs.flat.recommended.languageOptions,
+  },
+};
+
+/** @type {import('eslint').Linter.Config} */
+const eslintPluginReactHooksRecommended = {
+  name: 'eslint-plugin-react-hooks-recommended',
+  files: [...JSX_FILE_PATTERNS],
+  plugins: { 'react-hooks': reactHooks },
+  rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+  },
+};
+
+/** @type {import('eslint').Linter.Config} */
+const eslintPluginReactRefreshRecommended = {
+  name: 'eslint-config-react-refresh',
+  ...reactRefresh.configs.recommended,
+};
+
+/** @type {import('eslint').Linter.Config} */
+const jsxA11yConfigRecommended = {
+  ...jsxA11y.flatConfigs.recommended,
+};
+
+/** @type {import('eslint').Linter.Config} */
+const ignoreConfig = {
+  name: 'eslint-config-ignores',
+  ignores: [...IGNORE_PATTERNS],
+};
+
+/** @type {import('eslint').Linter.Config} */
+const eslintPluginVitestRecommended = {
+  name: 'eslint-plugin-vitest-recommended',
+  files: [...TEST_FILE_PATTERNS],
   plugins: { vitest },
   settings: {
     vitest: {
@@ -71,7 +96,6 @@ const testingConfig = {
       ...vitest.environments.env.globals,
     },
   },
-  ...testingLibrary.configs['flat/dom'],
   rules: {
     ...vitest.configs.recommended.rules,
     'vitest/expect-expect': 'off', // eliminate
@@ -79,39 +103,116 @@ const testingConfig = {
 };
 
 /** @type {import('eslint').Linter.Config} */
-const languageOptions = {
-  languageOptions: {
-    parserOptions: {
-      projectService: true,
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
+const eslintPluginTestingLibraryRecommended = {
+  name: 'eslint-plugin-testing-library-recommended',
+  ...testingLibrary.configs['flat/dom'],
 };
 
-const eslintConfig = tseslint.config(
-  eslint.configs.recommended,
-  ignoreConfig,
-  eslintConfigPrettier,
-  tseslint.configs.recommendedTypeChecked,
-  reactRefresh.configs.recommended,
-  ...compilerConfig,
-  testingConfig,
-  jestDom.configs['flat/recommended'],
-  languageOptions,
-  ...nextConfig,
+/** @type {import('eslint').Linter.Config} */
+const eslintPluginJestDomRecommended = {
+  name: 'eslint-config-jest-dom',
+  ...jestDom.configs['flat/recommended'],
+};
+
+/** @type {import('eslint').Linter.Config} */
+const eslintDefaults = {
+  name: 'eslint-config-default-recommended',
+  ...eslint.configs.recommended,
+};
+
+/** @type {import('eslint').Linter.Config} */
+const prettierConfig = {
+  name: 'eslint-config-prettier',
+  ...eslintConfigPrettier,
+};
+
+/** @type {import('eslint').Linter.Config[]} */
+const nextConfig = [
   {
-    extends: [
-      eslint.configs.recommended,
-      eslintConfigPrettier,
-      tseslint.configs.recommendedTypeChecked,
-      reactRefresh.configs.recommended,
-      jestDom.configs['flat/recommended'],
-      ignoreConfig,
-      languageOptions,
-      ...compilerConfig,
-      ...nextConfig,
-    ],
-    files: ['*.ts', '*.tsx', '*.js', '*.jsx', '*.cjs', '*.mjs'],
+    name: 'eslint-plugin-next-recommended',
+    files: [...JSX_FILE_PATTERNS],
+    plugins: {
+      '@next/next': pluginNext,
+    },
+    languageOptions: {
+      // parser,
+      // equivalent to :
+      //  env: {
+      //    browser: true,
+      //    node: true,
+      //  }
+
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        requireConfigFile: false,
+        tsconfigRootDir: import.meta.dirname,
+        projectService: true,
+
+        // ecmaVersion: 2022,
+        sourceType: 'module',
+        allowImportExportEverywhere: true,
+        babelOptions: {
+          presets: ['next/babel'],
+          caller: {
+            // Eslint supports top level await when a parser for it is included. We enable the parser by default for Babel.
+            supportsTopLevelAwait: true,
+          },
+        },
+        // ecmaFeatures: {
+        //   jsx: true,
+        // },
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+
+    rules: {
+      // ...eslintConfigNext.rules,
+      ...pluginNext.configs.recommended.rules,
+    },
+  },
+  {
+    name: 'eslint-config-next-core-web-vitals',
+    files: [...JSX_FILE_PATTERNS],
+    rules: {
+      '@next/next/no-html-link-for-pages': 'error',
+      '@next/next/no-sync-scripts': 'error',
+    },
+  },
+];
+
+const eslintConfig = tseslint.config(
+  ignoreConfig,
+
+  eslintDefaults,
+
+  tseslint.configs.recommendedTypeChecked,
+
+  eslintPluginReactRecommended,
+  eslintPluginReactHooksRecommended,
+  eslintPluginReactRefreshRecommended,
+  eslintPluginReactcompiler,
+
+  jsxA11yConfigRecommended,
+
+  eslintPluginVitestRecommended,
+  eslintPluginTestingLibraryRecommended,
+  eslintPluginJestDomRecommended,
+
+  ...nextConfig,
+
+  prettierConfig,
+
+  {
+    name: 'eslint-config-my-config',
+    files: [...JSX_FILE_PATTERNS],
+    ignores: [...IGNORE_PATTERNS],
     rules: {
       'react-refresh/only-export-components': [
         'off',
