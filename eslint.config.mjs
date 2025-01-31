@@ -11,7 +11,9 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactCompiler from 'eslint-plugin-react-compiler';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-// import eslintConfigNext from 'eslint-config-next';
+import importPlugin from 'eslint-plugin-import';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 const JSX_FILE_PATTERNS = ['**/*.{j,t,mj,mt,cj,ct}s?(x)'];
 const TEST_FILE_PATTERNS = [
@@ -126,63 +128,97 @@ const prettierConfig = {
   ...eslintConfigPrettier,
 };
 
-/** @type {import('eslint').Linter.Config[]} */
-const nextConfig = [
-  {
-    name: 'eslint-plugin-next-recommended',
-    files: [...JSX_FILE_PATTERNS],
-    plugins: {
-      '@next/next': pluginNext,
+/** @type {import('eslint').Linter.Config} */
+const eslintPluginNextRecommended = {
+  name: 'eslint-plugin-next-recommended',
+  files: [...JSX_FILE_PATTERNS],
+  plugins: {
+    '@next/next': pluginNext,
+  },
+  rules: {
+    ...pluginNext.configs.recommended.rules,
+  },
+};
+
+/** @type {import('eslint').Linter.Config} */
+const eslintConfigNext = {
+  name: 'eslint-config-next',
+  plugins: { import: importPlugin },
+  languageOptions: {
+    parser: require('./node_modules/eslint-config-next/parser'),
+    globals: {
+      ...globals.browser,
+      ...globals.node,
     },
-    languageOptions: {
-      // parser,
-      // equivalent to :
-      //  env: {
-      //    browser: true,
-      //    node: true,
-      //  }
-
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-      parserOptions: {
-        requireConfigFile: false,
-        tsconfigRootDir: import.meta.dirname,
-        projectService: true,
-
-        // ecmaVersion: 2022,
-        sourceType: 'module',
-        allowImportExportEverywhere: true,
-        babelOptions: {
-          presets: ['next/babel'],
-          caller: {
-            // Eslint supports top level await when a parser for it is included. We enable the parser by default for Babel.
-            supportsTopLevelAwait: true,
-          },
+    parserOptions: {
+      requireConfigFile: false,
+      tsconfigRootDir: import.meta.dirname,
+      projectService: true,
+      sourceType: 'module',
+      allowImportExportEverywhere: true,
+      babelOptions: {
+        presets: ['next/babel'],
+        caller: {
+          // Eslint supports top level await when a parser for it is included. We enable the parser by default for Babel.
+          supportsTopLevelAwait: true,
         },
-        // ecmaFeatures: {
-        //   jsx: true,
-        // },
       },
-    },
-    settings: {
-      react: {
-        version: 'detect',
+      ecmaFeatures: {
+        jsx: true,
       },
-    },
-
-    rules: {
-      // ...eslintConfigNext.rules,
-      ...pluginNext.configs.recommended.rules,
     },
   },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  rules: {
+    'import/no-anonymous-default-export': 'warn',
+    'react/no-unknown-property': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+    'jsx-a11y/alt-text': [
+      'warn',
+      {
+        elements: ['img'],
+        img: ['Image'],
+      },
+    ],
+    'jsx-a11y/aria-props': 'warn',
+    'jsx-a11y/aria-proptypes': 'warn',
+    'jsx-a11y/aria-unsupported-elements': 'warn',
+    'jsx-a11y/role-has-required-aria-props': 'warn',
+    'jsx-a11y/role-supports-aria-props': 'warn',
+    'react/jsx-no-target-blank': 'off',
+  },
+};
+
+/** @type {import('eslint').Linter.Config} */
+const coreWebVitalsConfig = {
+  name: 'core-web-vitals',
+  files: [...JSX_FILE_PATTERNS],
+  plugins: {
+    '@next/next': pluginNext,
+  },
+  rules: {
+    '@next/next/no-html-link-for-pages': 'error',
+    '@next/next/no-sync-scripts': 'error',
+  },
+};
+
+/** @type {import('eslint').Linter.Config} */
+const tsEslintConfigsRecommendedTypeChecked = [
+  tseslint.configs.recommendedTypeChecked,
   {
-    name: 'eslint-config-next-core-web-vitals',
+    name: 'ts-eslint-recommended-type-checked-parser-options',
     files: [...JSX_FILE_PATTERNS],
-    rules: {
-      '@next/next/no-html-link-for-pages': 'error',
-      '@next/next/no-sync-scripts': 'error',
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
 ];
@@ -192,7 +228,7 @@ const eslintConfig = tseslint.config(
 
   eslintDefaults,
 
-  tseslint.configs.recommendedTypeChecked,
+  tsEslintConfigsRecommendedTypeChecked,
 
   eslintPluginReactRecommended,
   eslintPluginReactHooksRecommended,
@@ -205,10 +241,22 @@ const eslintConfig = tseslint.config(
   eslintPluginTestingLibraryRecommended,
   eslintPluginJestDomRecommended,
 
-  ...nextConfig,
+  eslintPluginNextRecommended,
+  eslintConfigNext,
+  coreWebVitalsConfig,
 
   prettierConfig,
 
+  {
+    files: [...JSX_FILE_PATTERNS],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   {
     name: 'eslint-config-my-config',
     files: [...JSX_FILE_PATTERNS],
