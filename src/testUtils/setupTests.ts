@@ -1,20 +1,17 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 // import '@testing-library/jest-dom/vitest';
 
-// import mockNextFontGoogle from '@/testUtils/mockNextFontGoogle';
+import mockNextFontGoogle from '@/testUtils/mockNextFontGoogle';
 import mockNextImage from '@/testUtils/mockNextImage';
 
-// import mockNextFont from './mockNextFontGoogle';
-// import mockNextImage from './mockNextImage';
-
-// mockNextFont(['Rubik_Scribble', 'Inter']);
+mockNextFontGoogle(['Rubik_Scribble', 'Inter']);
 
 beforeAll(() => {
   vi.mock('next/image', () => mockNextImage);
-  // vi.mock(`next/font/google`, () => mockNextFontGoogle(['Raleway']));
+  vi.mock('next/font/google', () => ({
+    __esModule: true, // This property is required for the module to be recognized as an ES module when there is a default export.
+    default: () => mockNextFontGoogle(['Raleway']),
+  }));
 });
 
 beforeEach(() => {

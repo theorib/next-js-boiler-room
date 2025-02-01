@@ -12,18 +12,21 @@ describe('Temp Test', () => {
         <HomePage />
       </Suspense>,
     );
-    const img = await screen.getByRole('heading', {
+    const heading = await screen.getByRole('heading', {
       name: 'I am the home page',
     });
-    await expect.element(img).toBeInTheDocument();
+    const img = await screen.getByRole('img', {
+      name: 'land of the wind',
+    });
+    await expect.element(heading).toBeVisible();
+    await expect.element(img).toBeVisible();
 
     const btn = await page.getByRole('button', { name: 'Click Me' });
     const counter = await page.getByText('Counter: 0');
-    await expect.element(btn).toBeInTheDocument();
-    await expect.element(counter).toBeInTheDocument();
+    await expect.element(btn).toBeVisible();
+    await expect.element(counter).toBeVisible();
 
     await userEvent.click(btn);
-    // console.log(await screen.container.innerHTML);
 
     await expect.element(page.getByText('Counter: 1')).toBeInTheDocument();
 
