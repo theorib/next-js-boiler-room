@@ -3,7 +3,7 @@ import eslint from '@eslint/js';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import jestDom from 'eslint-plugin-jest-dom';
-import testingLibrary from 'eslint-plugin-testing-library';
+// import testingLibrary from 'eslint-plugin-testing-library';
 import vitest from 'eslint-plugin-vitest';
 import pluginNext from '@next/eslint-plugin-next';
 import reactPlugin from 'eslint-plugin-react';
@@ -100,7 +100,7 @@ const eslintPluginVitestRecommended = {
   },
   rules: {
     ...vitest.configs.recommended.rules,
-    'vitest/expect-expect': 'off', // eliminate
+    // 'vitest/expect-expect': 'off', // eliminate
   },
 };
 
@@ -238,7 +238,7 @@ const eslintConfig = tseslint.config(
   jsxA11yConfigRecommended,
 
   eslintPluginVitestRecommended,
-  eslintPluginTestingLibraryRecommended,
+  // eslintPluginTestingLibraryRecommended,
   eslintPluginJestDomRecommended,
 
   eslintPluginNextRecommended,

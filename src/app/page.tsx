@@ -19,7 +19,7 @@ export default function HomePage() {
         className="object-cover object-center"
         sizes="50vw"
       />
-      <span className="border-2 px-6 py-3 pt-1 text-6xl">{count}</span>
+      <span className="border-2 px-6 py-3 text-3xl">Counter: {count}</span>
       <Button onClick={handleCount}>Click Me</Button>
     </div>
   );
