@@ -3,7 +3,7 @@ import eslint from '@eslint/js';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import jestDom from 'eslint-plugin-jest-dom';
-// import testingLibrary from 'eslint-plugin-testing-library';
+import testingLibrary from 'eslint-plugin-testing-library';
 import vitest from 'eslint-plugin-vitest';
 import pluginNext from '@next/eslint-plugin-next';
 import reactPlugin from 'eslint-plugin-react';
@@ -15,12 +15,19 @@ import importPlugin from 'eslint-plugin-import';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-const JSX_FILE_PATTERNS = ['**/*.{j,t,mj,mt,cj,ct}s?(x)'];
+const JSX_FILE_PATTERNS = ['**/*.[jt]s?(x)', '**/*.?(c|m)[jt]s?(x)'];
+const NEXT_JSX_FILE_PATTERNS = [
+  'src/**/*.[jt]s?(x)',
+  'src/**/*.?(c|m)[jt]s?(x)',
+];
+
 const TEST_FILE_PATTERNS = [
-  '**/__test(s)__/*.{j,t,mj,mt,cj,ct}s?(x)',
-  '**/__test(s)__/*.cjs',
-  '**/*.spec.{j,t,mj,mt,cj,ct}s?(x)',
-  '**/*.test(s).{j,t,mj,mt,ct,ct}s?(x)',
+  '**/__tests__/**/*.[jt]s?(x)',
+  '**/__tests__/**/*.?(c|m)[jt]s?(x)',
+  '**/*.spec.[jt]s?(x)',
+  '**/*.spec.?(c|m)[jt]s?(x)',
+  '**/*.test.[jt]s?(x)',
+  '**/*.test.?(c|m)[jt]s?(x)',
 ];
 
 const IGNORE_PATTERNS = [
@@ -37,13 +44,14 @@ const IGNORE_PATTERNS = [
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginReactcompiler = {
   name: 'eslint-plugin-react-compiler',
+  files: [...NEXT_JSX_FILE_PATTERNS],
   ...reactCompiler.configs.recommended,
 };
 
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginReactRecommended = {
   name: 'eslint-plugin-react-recommended',
-  files: [...JSX_FILE_PATTERNS],
+  files: [...NEXT_JSX_FILE_PATTERNS],
   ...reactPlugin.configs.flat.recommended,
   languageOptions: {
     globals: {
@@ -57,7 +65,7 @@ const eslintPluginReactRecommended = {
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginReactHooksRecommended = {
   name: 'eslint-plugin-react-hooks-recommended',
-  files: [...JSX_FILE_PATTERNS],
+  files: [...NEXT_JSX_FILE_PATTERNS],
   plugins: { 'react-hooks': reactHooks },
   rules: {
     'react-hooks/rules-of-hooks': 'error',
@@ -68,11 +76,13 @@ const eslintPluginReactHooksRecommended = {
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginReactRefreshRecommended = {
   name: 'eslint-config-react-refresh',
+  files: [...NEXT_JSX_FILE_PATTERNS],
   ...reactRefresh.configs.recommended,
 };
 
 /** @type {import('eslint').Linter.Config} */
 const jsxA11yConfigRecommended = {
+  files: [...NEXT_JSX_FILE_PATTERNS],
   ...jsxA11y.flatConfigs.recommended,
 };
 
@@ -100,6 +110,7 @@ const eslintPluginVitestRecommended = {
   },
   rules: {
     ...vitest.configs.recommended.rules,
+    '@typescript-eslint/await-thenable': 'warn',
     // 'vitest/expect-expect': 'off', // eliminate
   },
 };
@@ -107,42 +118,47 @@ const eslintPluginVitestRecommended = {
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginTestingLibraryRecommended = {
   name: 'eslint-plugin-testing-library-recommended',
+  files: [...TEST_FILE_PATTERNS],
   ...testingLibrary.configs['flat/dom'],
 };
 
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginJestDomRecommended = {
   name: 'eslint-config-jest-dom',
+  files: [...TEST_FILE_PATTERNS],
   ...jestDom.configs['flat/recommended'],
 };
 
 /** @type {import('eslint').Linter.Config} */
 const eslintDefaults = {
   name: 'eslint-config-default-recommended',
+  files: [...JSX_FILE_PATTERNS],
   ...eslint.configs.recommended,
 };
 
 /** @type {import('eslint').Linter.Config} */
 const prettierConfig = {
   name: 'eslint-config-prettier',
+  files: [...JSX_FILE_PATTERNS],
   ...eslintConfigPrettier,
 };
 
 /** @type {import('eslint').Linter.Config} */
 const eslintPluginNextRecommended = {
   name: 'eslint-plugin-next-recommended',
-  files: [...JSX_FILE_PATTERNS],
   plugins: {
     '@next/next': pluginNext,
   },
   rules: {
     ...pluginNext.configs.recommended.rules,
   },
+  files: [...NEXT_JSX_FILE_PATTERNS],
 };
 
 /** @type {import('eslint').Linter.Config} */
 const eslintConfigNext = {
   name: 'eslint-config-next',
+
   plugins: { import: importPlugin },
   languageOptions: {
     parser: require('./node_modules/eslint-config-next/parser'),
@@ -192,12 +208,13 @@ const eslintConfigNext = {
     'jsx-a11y/role-supports-aria-props': 'warn',
     'react/jsx-no-target-blank': 'off',
   },
+  files: [...NEXT_JSX_FILE_PATTERNS],
 };
 
 /** @type {import('eslint').Linter.Config} */
 const coreWebVitalsConfig = {
   name: 'core-web-vitals',
-  files: [...JSX_FILE_PATTERNS],
+  files: [...NEXT_JSX_FILE_PATTERNS],
   plugins: {
     '@next/next': pluginNext,
   },
@@ -227,7 +244,6 @@ const eslintConfig = tseslint.config(
   ignoreConfig,
 
   eslintDefaults,
-
   tsEslintConfigsRecommendedTypeChecked,
 
   eslintPluginReactRecommended,
@@ -237,7 +253,6 @@ const eslintConfig = tseslint.config(
 
   jsxA11yConfigRecommended,
 
-  eslintPluginVitestRecommended,
   // eslintPluginTestingLibraryRecommended,
   eslintPluginJestDomRecommended,
 
@@ -245,18 +260,9 @@ const eslintConfig = tseslint.config(
   eslintConfigNext,
   coreWebVitalsConfig,
 
+  eslintPluginVitestRecommended,
   prettierConfig,
 
-  {
-    files: [...JSX_FILE_PATTERNS],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
   {
     name: 'eslint-config-my-config',
     files: [...JSX_FILE_PATTERNS],
