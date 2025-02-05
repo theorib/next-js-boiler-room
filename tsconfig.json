@@ -42,7 +42,8 @@
     "vitest.config.ts",
     "tailwind.config.ts",
     ".next/types/**/*.ts",
-    "postcss.config.cjs"
+    "postcss.config.mjs",
+    "eslint.config.mjs"
   ],
   "exclude": ["node_modules"]
 }
