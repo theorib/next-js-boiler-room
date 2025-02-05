@@ -43,7 +43,8 @@
     "tailwind.config.ts",
     ".next/types/**/*.ts",
     "postcss.config.mjs",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "src/vitest.shims.d.ts"
   ],
   "exclude": ["node_modules"]
 }
