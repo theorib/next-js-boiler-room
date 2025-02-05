@@ -12,17 +12,17 @@ describe('Temp Test', () => {
         <HomePage />
       </Suspense>,
     );
-    const heading = await screen.getByRole('heading', {
+    const heading = screen.getByRole('heading', {
       name: 'I am the home page',
     });
-    const img = await screen.getByRole('img', {
+    const img = screen.getByRole('img', {
       name: 'land of the wind',
     });
     await expect.element(heading).toBeVisible();
     await expect.element(img).toBeVisible();
 
-    const btn = await page.getByRole('button', { name: 'Click Me' });
-    const counter = await page.getByText('Counter: 0');
+    const btn = page.getByRole('button', { name: 'Click Me' });
+    const counter = page.getByText('Counter: 0');
     await expect.element(btn).toBeVisible();
     await expect.element(counter).toBeVisible();
 
