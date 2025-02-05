@@ -4,7 +4,7 @@ export default defineWorkspace([
   {
     extends: 'vitest.config.ts',
     test: {
-      include: ['src/**/*.{test,spec}.jsdom.{ts,tsx}'],
+      include: ['src/**/*.{test,spec}.jsdom.{ts,tsx,js,jsx}'],
       name: 'react-jsdom',
       environment: 'jsdom',
     },
@@ -13,10 +13,10 @@ export default defineWorkspace([
     extends: 'vitest.config.ts',
     test: {
       name: 'react-browser-mode',
-      include: ['src/**/*.{test,spec}.{ts,tsx}'],
+      include: ['src/**/*.{test,spec}.{ts,tsx,js,jsx}'],
       browser: {
         enabled: true,
-        headless: false,
+        headless: true,
         provider: 'playwright',
         instances: [{ browser: 'chromium' }],
       },
