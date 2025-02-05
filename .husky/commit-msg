@@ -1,1 +1,7 @@
-npx --no -- commitlint --edit $1
+# Only execute actions in the main branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" = "main" ]; then
+# START Action
+  npx --no -- commitlint --edit $1
+# END Action
+fi

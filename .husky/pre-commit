@@ -1,2 +1,8 @@
-pnpm lint-staged -v
-pnpm vitest run
+# Only execute actions in the main branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" = "main" ]; then
+# START Action
+  pnpm lint-staged -v
+  pnpm vitest run
+# END Action
+fi  
