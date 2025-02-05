@@ -13,6 +13,7 @@ import reactCompiler from 'eslint-plugin-react-compiler';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
 import { createRequire } from 'module';
+
 const require = createRequire(import.meta.url);
 
 const JSX_FILE_PATTERNS = ['**/*.[jt]s?(x)', '**/*.?(c|m)[jt]s?(x)'];
@@ -39,6 +40,12 @@ const IGNORE_PATTERNS = [
   '*.config.js',
   '*.config.mjs',
   '*.config.cjs',
+];
+const TS_IGNORE_PATTERNS = [
+  ...IGNORE_PATTERNS,
+  '*.config.mjs',
+  '*.config.cjs',
+  '*.config.js',
 ];
 
 /** @type {import('eslint').Linter.Config} */
@@ -161,16 +168,20 @@ const eslintConfigNext = {
 
   plugins: { import: importPlugin },
   languageOptions: {
-    parser: require('./node_modules/eslint-config-next/parser'),
+    parser: tseslint.parser,
     globals: {
       ...globals.browser,
       ...globals.node,
     },
     parserOptions: {
-      requireConfigFile: false,
+      project: true,
       tsconfigRootDir: import.meta.dirname,
-      projectService: true,
       sourceType: 'module',
+      ecmaFeatures: {
+        jsx: true,
+      },
+      requireConfigFile: false,
+      projectService: true,
       allowImportExportEverywhere: true,
       babelOptions: {
         presets: ['next/babel'],
@@ -178,9 +189,6 @@ const eslintConfigNext = {
           // Eslint supports top level await when a parser for it is included. We enable the parser by default for Babel.
           supportsTopLevelAwait: true,
         },
-      },
-      ecmaFeatures: {
-        jsx: true,
       },
     },
   },
@@ -230,6 +238,7 @@ const tsEslintConfigsRecommendedTypeChecked = [
   {
     name: 'ts-eslint-recommended-type-checked-parser-options',
     files: [...JSX_FILE_PATTERNS],
+    ignores: [...TS_IGNORE_PATTERNS],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
