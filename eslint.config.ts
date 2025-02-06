@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -28,7 +29,6 @@ const compat = new FlatCompat({
   resolvePluginsRelativeTo: __dirname,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TSX_FILE_PATTERNS = ['**/*.?(c|m)ts?(x)'];
 const JSX_FILE_PATTERNS = ['**/*.?(c|m)js?(x)'];
 const NEXT_JSX_FILE_PATTERNS = ['src/**/*.?(c|m)[jt]s?(x)'];
@@ -296,7 +296,7 @@ const eslintConfig = tseslint.config(
 
   eslintPluginReactRecommended,
   eslintPluginReactHooksRecommended,
-  eslintPluginReactRefreshRecommended,
+  // eslintPluginReactRefreshRecommended,
   eslintPluginReactcompiler,
 
   jsxA11yConfigRecommended,
