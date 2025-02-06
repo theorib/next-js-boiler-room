@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
-
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -53,6 +53,7 @@ const SidebarProvider = React.forwardRef<
     defaultOpen?: boolean;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
+    cookieStore: ReadonlyRequestCookies;
   }
 >(
   (
@@ -63,6 +64,7 @@ const SidebarProvider = React.forwardRef<
       className,
       style,
       children,
+      cookieStore,
       ...props
     },
     ref,
@@ -84,9 +86,14 @@ const SidebarProvider = React.forwardRef<
         }
 
         // This sets the cookie to keep the sidebar state.
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+        cookieStore.set(SIDEBAR_COOKIE_NAME, openState.toString(), {
+          maxAge: SIDEBAR_COOKIE_MAX_AGE,
+          path: '/',
+          sameSite: 'strict',
+        });
+        // document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
       },
-      [setOpenProp, open],
+      [setOpenProp, open, cookieStore],
     );
 
     // Helper to toggle the sidebar.
