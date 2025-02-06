@@ -311,7 +311,7 @@ const eslintConfig = tseslint.config(
 
   {
     name: 'eslint-config-my-config',
-    files: [...JSX_FILE_PATTERNS],
+    files: [...JSX_FILE_PATTERNS, ...TSX_FILE_PATTERNS],
     ignores: [...IGNORE_PATTERNS],
     languageOptions: {
       parser: tseslint.parser as Linter.Parser,
