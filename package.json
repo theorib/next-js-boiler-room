@@ -16,8 +16,8 @@
     "lint:inspector": "pnpm dlx @eslint/config-inspector@latest",
     "lint:debug:prettier": "pnpm dlx eslint-config-prettier src/app/layout.tsx",
     "typecheck": "tsc --noEmit --skipLibCheck",
-    "test": "vitest run --browser.headless --ui",
-    "test:ui": "vitest run",
+    "test": "vitest run --browser.headless",
+    "test:ui": "vitest run --ui",
     "test:coverage": "vitest run --browser.headless --coverage",
     "prepare": "husky"
   },
