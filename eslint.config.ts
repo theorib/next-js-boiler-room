@@ -320,6 +320,9 @@ const eslintConfig = tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    plugins: {
+      ...jsxA11yConfigRecommended.plugins,
+    },
     rules: {
       'react-refresh/only-export-components': [
         'off',
@@ -333,6 +336,7 @@ const eslintConfig = tseslint.config(
           ignoreIIFE: true,
         },
       ],
+      'jsx-a11y/anchor-has-content': 'warn',
     },
   } satisfies Linter.Config,
 );
