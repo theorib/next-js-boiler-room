@@ -1,5 +1,4 @@
 'use client'
-import DarkModeSwitchBtn from '@/components/custom/DarkModeSwitchBtn'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import landOfTheWind from 'public/img/land-of-the-wind.jpg'
@@ -11,7 +10,6 @@ export default function HomePage() {
   }
   return (
     <div className="flex flex-col items-center justify-center gap-3">
-      <DarkModeSwitchBtn />
       <h1 className="font-raleway mb-4 text-5xl">I am the home page</h1>
       <Image
         src={landOfTheWind}
