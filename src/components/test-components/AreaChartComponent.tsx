@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   ChartConfig,
@@ -7,8 +7,8 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart';
-import { Area, AreaChart, XAxis, YAxis } from 'recharts';
+} from '@/components/ui/chart'
+import { Area, AreaChart, XAxis, YAxis } from 'recharts'
 
 const data = [
   {
@@ -53,7 +53,7 @@ const data = [
     pv: 4300,
     amt: 2100,
   },
-];
+]
 
 const chartConfig = {
   uv: {
@@ -68,7 +68,7 @@ const chartConfig = {
     label: 'amt',
     color: '#187b5f',
   },
-} satisfies ChartConfig;
+} satisfies ChartConfig
 
 export default function AreaChartComponent() {
   return (
@@ -101,5 +101,5 @@ export default function AreaChartComponent() {
         <ChartLegend content={<ChartLegendContent />} />
       </AreaChart>
     </ChartContainer>
-  );
+  )
 }

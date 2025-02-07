@@ -1,5 +1,5 @@
-import AreaChartComponent from '@/components/test-components/AreaChartComponent';
-import BarChartComponent from '@/components/test-components/BarChartComponent';
+import AreaChartComponent from '@/components/test-components/AreaChartComponent'
+import BarChartComponent from '@/components/test-components/BarChartComponent'
 
 export default function page() {
   return (
@@ -7,5 +7,5 @@ export default function page() {
       <BarChartComponent />
       <AreaChartComponent />
     </div>
-  );
+  )
 }

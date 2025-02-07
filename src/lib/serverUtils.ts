@@ -1,2 +1,2 @@
-'use server';
-import 'server-only';
+'use server'
+import 'server-only'

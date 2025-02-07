@@ -1,14 +1,14 @@
-'use client';
-import DarkModeSwitchBtn from '@/components/custom/DarkModeSwitchBtn';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import landOfTheWind from 'public/img/land-of-the-wind.jpg';
-import { useState } from 'react';
+'use client'
+import DarkModeSwitchBtn from '@/components/custom/DarkModeSwitchBtn'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import landOfTheWind from 'public/img/land-of-the-wind.jpg'
+import { useState } from 'react'
 export default function HomePage() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
   const handleCount = () => {
-    setCount(count => count + 1);
-  };
+    setCount(count => count + 1)
+  }
   return (
     <div className="flex flex-col items-center justify-center gap-3">
       <DarkModeSwitchBtn />
@@ -24,5 +24,5 @@ export default function HomePage() {
       <span className="border-2 px-6 py-3 text-3xl">Counter: {count}</span>
       <Button onClick={handleCount}>Click Me</Button>
     </div>
-  );
+  )
 }
