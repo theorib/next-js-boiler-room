@@ -16,7 +16,6 @@ export default async function MainProvider({ children }: PropsWithChildren) {
         disableTransitionOnChange
       >
         <SidebarProvider
-          cookieStore={cookieStore}
           defaultOpen={defaultOpen}
           className="flex min-h-screen grow flex-col items-center justify-center"
         >
