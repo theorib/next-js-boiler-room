@@ -1,6 +1,6 @@
 const paths = {
   homePage() {
-    return '/';
+    return '/'
   },
-};
-export default paths;
+}
+export default paths

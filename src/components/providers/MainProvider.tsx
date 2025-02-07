@@ -1,11 +1,14 @@
-import { cookies } from 'next/headers';
-import { ThemeProvider } from '@/components/providers/theme-provider';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { PropsWithChildren } from 'react';
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import { PropsWithChildren } from 'react'
+import { getCookie } from 'cookies-next/server'
+import { cookies } from 'next/headers'
+import { SIDEBAR_COOKIE_NAME, SidebarProvider } from '@/components/ui/sidebar'
 
 export default async function MainProvider({ children }: PropsWithChildren) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
+  // const cookieStore = await cookies()
+  // const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true'
+  const defaultOpen =
+    (await getCookie(SIDEBAR_COOKIE_NAME, { cookies })) === 'true'
 
   return (
     <>
@@ -16,7 +19,6 @@ export default async function MainProvider({ children }: PropsWithChildren) {
         disableTransitionOnChange
       >
         <SidebarProvider
-          cookieStore={cookieStore}
           defaultOpen={defaultOpen}
           className="flex min-h-screen grow flex-col items-center justify-center"
         >
@@ -24,5 +26,5 @@ export default async function MainProvider({ children }: PropsWithChildren) {
         </SidebarProvider>
       </ThemeProvider>
     </>
-  );
+  )
 }
