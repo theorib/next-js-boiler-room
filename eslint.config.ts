@@ -36,7 +36,7 @@ type ConfigFiles = TSESLint.FlatConfig.Config['files']
 // Eslint Default is Array<string>
 type ConfigIgnores = TSESLint.FlatConfig.Config['ignores']
 // Eslint Default is ESLint.Plugin
-type ConfigPlugin = TSESLint.FlatConfig.Plugin | undefined
+type ConfigPlugin = TSESLint.FlatConfig.Plugin
 // Eslint Default is Record<string, ESLint.Plugin>
 type ConfigPlugins = TSESLint.FlatConfig.Plugins | undefined
 // Eslint Default is Linter.RulesRecord
@@ -57,9 +57,21 @@ const compat = new FlatCompat({
   resolvePluginsRelativeTo: __dirname,
 })
 
-const TSX_FILE_PATTERNS = ['**/*.?(c|m)ts?(x)'] satisfies ConfigFiles
-const JSX_FILE_PATTERNS = ['**/*.?(c|m)js?(x)'] satisfies ConfigFiles
-const NEXT_JSX_FILE_PATTERNS = [
+const JS_FILE_PATTERNS = ['**/*.?(c|m)js'] satisfies ConfigFiles
+const JSX_FILE_PATTERNS = ['**/*.?(c|m)jsx'] satisfies ConfigFiles
+const TS_FILE_PATTERNS = ['**/*.?(c|m)ts'] satisfies ConfigFiles
+const TSX_FILE_PATTERNS = ['**/*.?(c|m)tsx'] satisfies ConfigFiles
+const JSX_TSX_FILE_PATTERNS = [
+  ...JSX_FILE_PATTERNS,
+  ...TSX_FILE_PATTERNS,
+] satisfies ConfigFiles
+const JS_JSX_TS_TSX_FILE_PATTERNS = [
+  ...JS_FILE_PATTERNS,
+  ...JSX_FILE_PATTERNS,
+  ...TS_FILE_PATTERNS,
+  ...TSX_FILE_PATTERNS,
+] satisfies ConfigFiles
+const NEXT_JS_JSX_TS_TSX_FILE_PATTERNS = [
   'src/**/*.?(c|m)[jt]s?(x)',
 ] satisfies ConfigFiles
 
@@ -86,7 +98,8 @@ const IGNORE_PATTERNS = [
 ] satisfies ConfigIgnores
 
 /**
- * 'eslint-plugin-tsdoc' does not have a configuration recommended config directly compatible with flat config files ESlint v9+ so we need to create our own
+ * 'eslint-plugin-tsdoc' does not have a recommended config that is directly compatible with flat config files ESlint v9+ so we need to create our own
+ * @see {@link https://github.com/microsoft/tsdoc/issues/374#issuecomment-2336536959}
  */
 const tsdocRecommended = {
   name: 'tsdoc/recommended',
@@ -98,52 +111,76 @@ const tsdocRecommended = {
   },
 } satisfies Config
 
+/**
+ * This is the recommended configuration for React projects
+ * @see {@link https://github.com/jsx-eslint/eslint-plugin-react?tab=readme-ov-file#configuring-shared-settings}
+ */
 const reactRecommended = {
   name: 'react/recommended',
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
   ...react.configs.flat.recommended,
-  plugins: {
-    react,
-  },
   languageOptions: {
     ...react.configs.flat.recommended.languageOptions,
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-      },
-    },
     globals: {
       ...globals.serviceworker,
       ...globals.browser,
     },
   },
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
+  settings: { react: { version: 'detect' } },
 } satisfies Config
 
+/**
+ * JSX Runtime is recommended for React v17+ projects
+ * @see {@link https://github.com/jsx-eslint/eslint-plugin-react?tab=readme-ov-file#configuring-shared-settings}
+ */
+const reactJsxRuntime = {
+  name: 'react/jsx-runtime',
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
+  ...react.configs.flat['jsx-runtime'],
+} satisfies Config
+
+/**
+ * This eslint plugin enforces React's Rule of Hooks
+ * @see {@link https://react.dev/reference/rules/rules-of-hooks}
+ * As of 'eslint-plugin-react-hooks' v5.1.0 there is a bug when
+ * implementing the current recommended way of adding this plugin.
+ * It breaks ESlint `TypeError: Cannot read properties of undefined (reading 'plugins')`
+ * This configuration follows the plugin's custom configuration suggestion which is currenlty exactly the same as what their recommended config should be:
+ * @see {@link https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks#custom-configuration}
+ */
 const reactHooksRecommended = {
   name: 'react-hooks/recommended',
-  files: [...NEXT_JSX_FILE_PATTERNS],
-  plugins: { 'react-hooks': reactHooks as ESLint.Plugin },
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
+  // plugins: { 'react-hooks': reactHooks as ESLint.Plugin },
+  plugins: { 'react-hooks': reactHooks as ConfigPlugin },
   rules: {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   },
 } satisfies Config
 
+/**
+ * This plugin Validate that your components can safely be updated with Fast Refresh or hot reloading.
+ * This configuration is the same as the recommended config with the addition of adding the files property as well as a name for the config.
+ * @see {@link https://github.com/ArnaudBarre/eslint-plugin-react-refresh?tab=readme-ov-file#recommended-config}
+ */
 const reactRefreshRecommended = {
   name: 'react-refresh/recommended',
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
   ...reactRefresh.configs.recommended,
-  rules: {
-    ...reactRefresh.configs.recommended.rules,
-    'react-refresh/only-export-components': 'warn',
-  },
 } satisfies Config
 
+/**
+ * This ESLint plugin will display any violations of the rules of React in your editor. When it does this, it means that the compiler has skipped over optimizing that component or hook. This is perfectly okay, and the compiler can recover and continue optimizing other components in your codebase.
+
+ * The current recommended ways of implementing this plugin are:
+ * {@link https://react.dev/learn/react-compiler#installing-eslint-plugin-react-compiler}
+ * {@link https://github.com/facebook/react/tree/main/compiler/packages/eslint-plugin-react-compiler}
+ * However, as of 'eslint-plugin-react-compiler' v19.0.0-beta-714736e-20250131 there is a bug in both recommended ways of using this plugin.
+ * The current workaround I found is to use the FlatCompat utility to patch the config from .eslintrc deprecated config styles.
+ * Currently the plugin throw a TypeError: Cannot read properties of undefined (reading 'configs') when running eslint
+
+ */
 const [compilerConfigCompat] = compat.config({
   plugins: ['react-compiler'],
   rules: {
@@ -152,34 +189,51 @@ const [compilerConfigCompat] = compat.config({
 })
 
 const reactCompilerRecommended = {
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
   ...compilerConfigCompat,
   name: 'react-compiler/recommended',
 } satisfies Config
 
+/**
+ * This plugin does a static evaluation of the JSX in your code to spot accessibility issues in React apps.
+ * Bellow is the recommended config from the plugin's documentation with the addition of adding the files property as well as a name for the config.
+ * @see {@link https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/tree/main}
+ */
 const jsxA11yRecommended = {
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
   ...jsxA11y.flatConfigs.recommended,
   name: 'jsx-a11y/recommended',
 } satisfies Config
 
+/**
+ * This plugin Turns off all eslint rules that are unnecessary or might conflict with Prettier.
+ * This lets you use your favorite shareable configs without letting their stylistic choices get in the way when using Prettier.
+ * This configuration is the same as the recommended config with the addition of adding the files property as well as a name for the config.
+ * @see {@link https://github.com/prettier/eslint-config-prettier}
+ */
 const prettierRecommended = {
-  files: [...JSX_FILE_PATTERNS],
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
   ...prettier,
   name: 'prettier/recommended',
 } satisfies Config
 
+/**
+ * /node_modules/eslint-config-next/index.js
+Error: Failed to patch ESLint because the calling module was not recognized.
+https://github.com/microsoft/rushstack/issues
+https://nextjs.org/docs/pages/api-reference/config/eslint
+ */
 const nextNextRecommended = {
   name: '@next/next/recommended',
   plugins: {
-    '@next/next': next as ESLint.Plugin,
+    '@next/next': next as ConfigPlugin,
   },
 
   rules: {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ...(next?.configs?.recommended?.rules as ConfigRules),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- This is a bug in eslint-plugin-next
+    ...(next.configs.recommended.rules as ConfigRules),
   },
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...NEXT_JS_JSX_TS_TSX_FILE_PATTERNS],
 } satisfies Config
 
 const configNext = {
@@ -236,12 +290,12 @@ const configNext = {
     'jsx-a11y/role-supports-aria-props': 'warn',
     'react/jsx-no-target-blank': 'off',
   },
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...NEXT_JS_JSX_TS_TSX_FILE_PATTERNS],
 } satisfies Config
 
 const coreWebVitals = {
   name: 'core-web-vitals',
-  files: [...NEXT_JSX_FILE_PATTERNS],
+  files: [...NEXT_JS_JSX_TS_TSX_FILE_PATTERNS],
   plugins: {
     ...nextNextRecommended.plugins,
   },
@@ -350,12 +404,16 @@ const eslintConfig = [
   // typescriptEslintRecommendedTypeCheckedLanguageOptions,
   typescriptEslintDisableTypeChecked,
   reactRecommended,
+  reactJsxRuntime,
   reactHooksRecommended,
-  // eslintPluginReactRefreshRecommended,
+  reactRefreshRecommended,
   reactCompilerRecommended,
+
   jsxA11yRecommended,
+
   nextNextRecommended,
   configNext,
+
   coreWebVitals,
   vitestRecommended,
   vitestDisableTypeChecked,
@@ -364,7 +422,7 @@ const eslintConfig = [
   prettierRecommended,
   {
     name: 'custom-config',
-    files: [...JSX_FILE_PATTERNS, ...TSX_FILE_PATTERNS],
+    files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
     ignores: [...IGNORE_PATTERNS],
     languageOptions: {
       ecmaVersion: 'latest',
