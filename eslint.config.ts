@@ -1,26 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import tseslint from 'typescript-eslint'
-import { TSESLint } from '@typescript-eslint/utils'
 import eslint from '@eslint/js'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import eslintConfigPrettier from 'eslint-config-prettier'
-import vitest from 'eslint-plugin-vitest'
-// @ts-expect-error there are no type definitions for this
-import pluginNext from '@next/eslint-plugin-next'
+import tsdoc from 'eslint-plugin-tsdoc'
 import react from 'eslint-plugin-react'
-import globals from 'globals'
+import reactRefresh from 'eslint-plugin-react-refresh'
 // @ts-expect-error there are no type definitions for this
 import reactHooks from 'eslint-plugin-react-hooks'
+import prettier from 'eslint-config-prettier'
+import vitest from 'eslint-plugin-vitest'
+import jestDom from 'eslint-plugin-jest-dom'
+import testingLibrary from 'eslint-plugin-testing-library'
+// @ts-expect-error there are no type definitions for this
+import next from '@next/eslint-plugin-next'
+import globals from 'globals'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 // @ts-expect-error there are no type definitions for this
 import importPlugin from 'eslint-plugin-import'
-import { Linter, ESLint } from 'eslint'
 import { FlatCompat } from '@eslint/eslintrc'
-import path from 'path'
+import { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import jestDom from 'eslint-plugin-jest-dom'
-import testingLibrary from 'eslint-plugin-testing-library'
+import { type Linter, type ESLint } from 'eslint'
+import { type TSESLint } from '@typescript-eslint/utils'
 
+/**
+ * Replace Types from 'eslint' such as the ones from Linter and ESLint and it's sub types such as Linter.Config with stricter types from '\@typescript-eslint/utils'
+ * Replace Types from 'eslint' such as the ones from Linter and ESLint and it's sub types such as Linter.Config with stricter types from '\@typescript-eslint/utils'
+ * @see {@link https://typescript-eslint.io/packages/utils}
+ */
 // Eslint Default is Linter.Config
 type Config = TSESLint.FlatConfig.Config
 // Eslint Default is Array<Linter.Config>
@@ -39,8 +45,12 @@ type ConfigRules = TSESLint.FlatConfig.Config['rules']
 type ConfigLanguageOptions = TSESLint.FlatConfig.Config['languageOptions']
 
 const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __dirname = dirname(__filename)
 
+/**
+ * FlatCompat is a utility class that allows us to use eslintrc Config files (pre ESLint v9) with ESlint v9  Flat Config files
+ * @see {@link https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config }
+ */
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: eslint.configs.recommended,
@@ -74,6 +84,19 @@ const IGNORE_PATTERNS = [
   '**/dist/',
   '**/coverage/',
 ] satisfies ConfigIgnores
+
+/**
+ * 'eslint-plugin-tsdoc' does not have a configuration recommended config directly compatible with flat config files ESlint v9+ so we need to create our own
+ */
+const tsdocRecommended = {
+  name: 'tsdoc/recommended',
+  plugins: {
+    tsdoc: tsdoc,
+  },
+  rules: {
+    'tsdoc/syntax': 'warn',
+  },
+} satisfies Config
 
 const reactRecommended = {
   name: 'react/recommended',
@@ -142,19 +165,19 @@ const jsxA11yRecommended = {
 
 const prettierRecommended = {
   files: [...JSX_FILE_PATTERNS],
-  ...eslintConfigPrettier,
+  ...prettier,
   name: 'prettier/recommended',
 } satisfies Config
 
 const nextNextRecommended = {
   name: '@next/next/recommended',
   plugins: {
-    '@next/next': pluginNext as ESLint.Plugin,
+    '@next/next': next as ESLint.Plugin,
   },
 
   rules: {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    ...(pluginNext?.configs?.recommended?.rules as ConfigRules),
+    ...(next?.configs?.recommended?.rules as ConfigRules),
   },
   files: [...NEXT_JSX_FILE_PATTERNS],
 } satisfies Config
@@ -164,7 +187,7 @@ const configNext = {
 
   plugins: { import: importPlugin as ESLint.Plugin },
   languageOptions: {
-    parser: tseslint.parser as Linter.Parser,
+    parser: tseslint.parser,
     // parser: babelParser,
     globals: {
       ...globals.browser,
@@ -321,6 +344,7 @@ const typescriptEslintDisableTypeChecked = {
 
 const eslintConfig = [
   ignoreConfig,
+  tsdocRecommended,
   eslintDefaults,
   ...tseslint.configs.recommendedTypeChecked,
   // typescriptEslintRecommendedTypeCheckedLanguageOptions,
