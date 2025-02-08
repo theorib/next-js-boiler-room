@@ -18,8 +18,8 @@ import { Linter, ESLint } from 'eslint'
 import { FlatCompat } from '@eslint/eslintrc'
 import path from 'path'
 import { fileURLToPath } from 'url'
-// import jestDom from 'eslint-plugin-jest-dom';
-// import testingLibrary from 'eslint-plugin-testing-library';
+import jestDom from 'eslint-plugin-jest-dom'
+import testingLibrary from 'eslint-plugin-testing-library'
 
 // Eslint Default is Linter.Config
 type Config = TSESLint.FlatConfig.Config
@@ -263,17 +263,17 @@ const vitestDisableTypeChecked = {
   },
 } satisfies Config
 
-// const testingLibraryRecommended = {
-//   name: 'testing-library/recommended',
-//   files: [...TEST_FILE_PATTERNS],
-//   ...testingLibrary.configs['flat/dom'],
-// };
+const testingLibraryRecommended = {
+  name: 'testing-library/recommended',
+  files: [...TEST_FILE_PATTERNS],
+  ...testingLibrary.configs['flat/dom'],
+}
 
-// const jestDomRecommended = {
-//   name: 'jest-dom/recommended',
-//   files: [...TEST_FILE_PATTERNS],
-//   ...jestDom.configs['flat/recommended'],
-// };
+const jestDomRecommended = {
+  name: 'jest-dom/recommended',
+  files: [...TEST_FILE_PATTERNS],
+  ...jestDom.configs['flat/recommended'],
+}
 
 const ignoreConfig = {
   name: 'ignores',
@@ -335,6 +335,8 @@ const eslintConfig = [
   coreWebVitals,
   vitestRecommended,
   vitestDisableTypeChecked,
+  // testingLibraryRecommended,
+  // jestDomRecommended,
   prettierRecommended,
   {
     name: 'custom-config',
