@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 import PageHeaderComponent from '@/components/test-components/PageHeaderComponent';
 import { SidebarInset } from '@/components/ui/sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';

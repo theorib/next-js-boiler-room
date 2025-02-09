@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { raleway } from '@/lib/fonts'
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import MainProvider from '@/components/providers/MainProvider'
 import MainLayout from '@/components/test-components/MainLayout'
 export const metadata: Metadata = {
