@@ -460,7 +460,7 @@ const eslintConfig = [
   tsdocRecommended,
   ...eslintDefaults,
   ...typescriptEslintRecommendedTypeChecked,
-  // typescriptEslintRecommendedTypeCheckedLanguageOptions,
+  typescriptEslintRecommendedTypeCheckedLanguageOptions,
   typescriptEslintDisableTypeChecked,
   reactRecommended,
   reactJsxRuntime,
@@ -496,6 +496,20 @@ const eslintConfig = [
       ...jsxA11yRecommended.plugins,
     },
     rules: {
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          disallowTypeAnnotations: true,
+          fixStyle: 'inline-type-imports',
+        },
+      ],
+      'react/jsx-filename-extension': [
+        'error',
+        {
+          extensions: ['.tsx', '.jsx'],
+        },
+      ],
       'react-refresh/only-export-components': [
         'off',
         { allowConstantExport: true },
