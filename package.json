@@ -22,6 +22,11 @@
     "test": "vitest run --browser.headless",
     "test:ui": "vitest run --ui",
     "test:coverage": "vitest run --browser.headless --coverage",
+    "test:e2e": "exec playwright test",
+    "test:e2e:ui": "exec playwright test --ui",
+    "test:e2e:report": "exec playwright show-report",
+    "test:e2e:debug": "exec playwright test --debug",
+    "test:e2e:codegen": "exec playwright codegen",
     "prepare": "husky"
   },
   "dependencies": {
@@ -86,6 +91,7 @@
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.20.0",
     "@next/eslint-plugin-next": "^15.1.6",
+    "@playwright/test": "^1.50.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",

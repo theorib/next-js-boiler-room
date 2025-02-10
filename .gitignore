@@ -595,3 +595,9 @@ MigrationBackup/
 
 #Vitest
 /src/__tests__/__screenshots__/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
