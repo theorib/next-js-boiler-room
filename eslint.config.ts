@@ -17,7 +17,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y'
 // @ts-expect-error there are no type definitions for this
 import importPlugin from 'eslint-plugin-import'
 import { FlatCompat } from '@eslint/eslintrc'
-import { fixupConfigRules } from '@eslint/compat'
+import { fixupConfigRules, fixupPluginRules } from '@eslint/compat'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { type Linter, type ESLint } from 'eslint'
@@ -116,6 +116,8 @@ const tsdocRecommended = {
 /**
  * This is the recommended configuration for React projects
  * @see {@link https://github.com/jsx-eslint/eslint-plugin-react?tab=readme-ov-file#configuring-shared-settings}
+ * There are some additional parsing options inspired by Sharif's
+ * @see {@link https://github.com/AndreaPontrandolfo/sheriff/blob/master/packages/eslint-config-sheriff/src/getReactConfig.ts}
  */
 const reactRecommended = {
   name: 'react/recommended',
@@ -123,6 +125,18 @@ const reactRecommended = {
   ...react.configs.flat.recommended,
   languageOptions: {
     ...react.configs.flat.recommended.languageOptions,
+    parser: tseslint.parser,
+    parserOptions: {
+      ...react.configs.flat.recommended.languageOptions?.parserOptions,
+      ecmaFeatures: {
+        ...react.configs.flat.recommended.languageOptions?.parserOptions
+          ?.ecmaFeatures,
+        modules: true,
+        jsx: true,
+      },
+      project: true, // change this to your project's tsconfig.json
+      jsxPragma: null, // useful for typescript x react@17 https://github.com/jsx-eslint/eslint-plu
+    },
     globals: {
       ...globals.serviceworker,
       ...globals.browser,
@@ -146,7 +160,7 @@ const reactJsxRuntime = {
  * @see {@link https://react.dev/reference/rules/rules-of-hooks}
  * As of 'eslint-plugin-react-hooks' v5.1.0 and 'eslint' v9.19.0, there is a bug when implementing the current recommended way of adding this plugin.
  * It breaks ESlint `TypeError: Cannot read properties of undefined (reading 'plugins')`
- * This configuration follows the plugin's custom configuration suggestion which is currenlty exactly the same as what their recommended config should be:
+ * This configuration follows the plugin's custom configuration suggestion which is currently exactly the same as what their recommended config should be:
  * @see {@link https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks#custom-configuration}
  */
 const reactHooksRecommended = {
@@ -222,12 +236,12 @@ const prettierRecommended = {
  * The current recommended ways of implementing 'eslint-plugin-next' is:
  * @see {@link https://nextjs.org/docs/pages/api-reference/config/eslint}
  * However, as of 'eslint-plugin-next' v15.1.6 and 'eslint' v9.19.0 there is a bug when implementing their config.
- * This configuration follows the plugin's custom configuration suggestion which is currenlty exactly the same as what their recommended config should be.
+ * This configuration follows the plugin's custom configuration suggestion which is currently exactly the same as what their recommended config should be.
  */
 const nextNextRecommended = {
   name: '@next/next/recommended',
   plugins: {
-    '@next/next': next as ConfigPlugin,
+    '@next/next': fixupPluginRules(next as ESLint.Plugin),
   },
 
   rules: {
@@ -250,12 +264,12 @@ const nextNextRecommended = {
  * @see {@link https://blog.linotte.dev/eslint-9-next-js-935c2b6d0371}
  * Only solution I found was to try to rebuild the whole config from scratch referencing:
  * @see {@link https://github.com/vercel/next.js/blob/canary/packages/eslint-config-next/index.js}
- * I havent managed to make recreate the parser: @see {@link https://github.com/vercel/next.js/blob/main/packages/eslint-config-next/parser.js}
+ * I haven't managed to make recreate the parser: @see {@link https://github.com/vercel/next.js/blob/main/packages/eslint-config-next/parser.js}
  */
 const configNext = {
   name: 'config-next',
 
-  plugins: { import: importPlugin as ESLint.Plugin },
+  plugins: { import: importPlugin as ConfigPlugin },
   languageOptions: {
     parser: tseslint.parser,
     // parser: babelParser,
@@ -437,6 +451,7 @@ const typescriptEslintRecommendedTypeCheckedLanguageOptions = {
     parser: tseslint.parser,
     parserOptions: {
       projectService: true,
+      ecmaFeatures: { modules: true },
       tsconfigRootDir: import.meta.dirname,
     },
   },
@@ -466,7 +481,7 @@ const eslintConfig = [
   reactJsxRuntime,
   reactHooksRecommended,
   reactRefreshRecommended,
-  reactCompilerRecommended,
+  // reactCompilerRecommended,
 
   jsxA11yRecommended,
 
