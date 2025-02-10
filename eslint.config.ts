@@ -257,7 +257,9 @@ const nextNextRecommended = {
  * However, as of 'eslint-config-next' v15.1.6 and 'eslint' v9.19.0 there is a bug when implementing their config.
  * It generates an Error: Failed to patch ESLint because the calling module was not recognized. on '/node_modules/eslint-config-next/index.js'
  * @see {@link https://github.com/microsoft/rushstack/issues/4965}
+ * @see {@link https://github.com/microsoft/rushstack/issues/5049}
  * @see {@link https://github.com/microsoft/rushstack/issues/4635#issuecomment-2487050625}
+ *
  * Tried a few workarounds but none worked:
  * @see {@link https://github.com/kirill-konshin/utils/blob/main/packages/eslint-config-next-custom/index.js}
  * @see {@link https://github.com/microsoft/rushstack/issues/4965#issuecomment-2645922401}
