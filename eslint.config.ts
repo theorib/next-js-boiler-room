@@ -97,6 +97,7 @@ const IGNORE_PATTERNS = [
   '.git/',
   '**/dist/',
   '**/coverage/',
+  'playwright-report',
 ] satisfies ConfigIgnores
 
 /**
