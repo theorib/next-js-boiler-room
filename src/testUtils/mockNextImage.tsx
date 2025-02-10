@@ -13,7 +13,7 @@ import { vi } from 'vitest'
 import type { ImageProps, StaticImageData } from 'next/image'
 import type { ComponentType, ReactElement } from 'react'
 
-// Exellent suggestion to mock next/image from:
+// Excellent suggestion to mock next/image from:
 // https://github.com/vercel/next.js/discussions/32325#discussioncomment-6040668
 
 /**
