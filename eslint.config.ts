@@ -95,9 +95,14 @@ const IGNORE_PATTERNS = [
   '.next/',
   '**/node_modules/',
   '.git/',
+  'out',
+  'dist',
+  'coverage',
   '**/dist/',
   '**/coverage/',
-  'playwright-report',
+  'playwright-report/',
+  'test-results/',
+  'tests-examples/',
 ] satisfies ConfigIgnores
 
 /**
