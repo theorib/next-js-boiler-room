@@ -25,8 +25,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useSetCookie } from 'cookies-next/client'
-
-export const SIDEBAR_COOKIE_NAME = 'sidebar_is_open_state'
+import { SIDEBAR_COOKIE_NAME as SIDEBAR_COOKIE_NAME_CONST } from '@/lib/constants'
+// make sure this constant is im sync with the on the server, ideally it  should be exported from a contants file on the server
+const SIDEBAR_COOKIE_NAME = SIDEBAR_COOKIE_NAME_CONST
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = '16rem'
 const SIDEBAR_WIDTH_MOBILE = '18rem'
