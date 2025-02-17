@@ -3,6 +3,6 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 if [ "$branch" = "main" ]; then
 # START Action
   pnpm lint-staged -v
-  pnpm test
+  pnpm vitest run --browser.headless
 # END Action
 fi  
