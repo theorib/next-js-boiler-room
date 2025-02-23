@@ -151,5 +151,12 @@
     "react-is": "^19.0.0",
     "eslint": "^9.19.0",
     "date-fns": "^4.1.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "msw",
+      "sharp"
+    ]
   }
 }
