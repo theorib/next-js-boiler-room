@@ -4,8 +4,7 @@ import eslintJs from '@eslint/js'
 import tsdoc from 'eslint-plugin-tsdoc'
 import react from 'eslint-plugin-react'
 import reactRefresh from 'eslint-plugin-react-refresh'
-// @ts-expect-error there are no type definitions for this
-import reactHooks from 'eslint-plugin-react-hooks'
+import * as reactHooks from 'eslint-plugin-react-hooks'
 import prettier from 'eslint-config-prettier'
 import vitest from '@vitest/eslint-plugin'
 import testingLibrary from 'eslint-plugin-testing-library'
@@ -164,20 +163,11 @@ const reactJsxRuntime = {
 /**
  * This eslint plugin enforces React's Rule of Hooks
  * @see {@link https://react.dev/reference/rules/rules-of-hooks}
- * As of 'eslint-plugin-react-hooks' v5.1.0 and 'eslint' v9.19.0, there is a bug when implementing the current recommended way of adding this plugin.
- * It breaks ESlint `TypeError: Cannot read properties of undefined (reading 'plugins')`
- * This configuration follows the plugin's custom configuration suggestion which is currently exactly the same as what their recommended config should be:
- * @see {@link https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks#custom-configuration}
+ * This configuration follows the plugin's latest recommended rules with the addition of adding the files property for narrowing down the files that should be linted.
  */
 const reactHooksRecommended = {
-  name: 'react-hooks/recommended',
+  ...reactHooks.configs['recommended-latest'],
   files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
-  // plugins: { 'react-hooks': reactHooks as ESLint.Plugin },
-  plugins: { 'react-hooks': reactHooks as ConfigPlugin },
-  rules: {
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-  },
 } satisfies Config
 
 /**
