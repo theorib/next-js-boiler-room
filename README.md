@@ -10,12 +10,12 @@ An opinionated boilerplate for Next.js 15.
 - Styling:
   - [TailwindCSS v4+](https://tailwindcss.com/)
 - Tooling:
-  - [TypeScript v5.7+](https://www.typescriptlang.org/)
+  - [TypeScript v5.87+](https://www.typescriptlang.org/)
   - [ESLint v9+](https://eslint.org/)
   - [Prettier v3+](https://prettier.io/)
 - UI Libraries:
   - [shadcn/ui](https://ui.shadcn.com/)
-- Utilities:
+- Schema Validation:
   - [Zod v3.24+](https://zod.dev/)
 - Testing:
   - [Vitest v3+](https://vitest.dev/)
@@ -28,7 +28,6 @@ An opinionated boilerplate for Next.js 15.
     Runs hooks before Git commits and pushes. In this repository they are used to run linting and testing before committing changes to the Main branch.
   - [Commitlint v19+](https://commitlint.js.org/#/)
     Lints commit messages so they follow [Conventional Commits](https://www.conventionalcommits.org/) standards before commiting them to the Main branch.
-  - [Commitizen v4.3+](https://commitizen-tools.github.io/commitizen/)
   - [Lint-staged v15+](https://github.com/okonet/lint-staged):
     Runs ESlint, Prettier, and TypeScript checks on staged Git files before commiting changes to the Main branch.
 
