@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   // we will handle errors with git action hooks
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
