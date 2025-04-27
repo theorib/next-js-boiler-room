@@ -7,7 +7,6 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import * as reactHooks from 'eslint-plugin-react-hooks'
 import prettier from 'eslint-config-prettier'
 import vitest from '@vitest/eslint-plugin'
-import testingLibrary from 'eslint-plugin-testing-library'
 import jestDom from 'eslint-plugin-jest-dom'
 // @ts-expect-error there are no type definitions for this
 import next from '@next/eslint-plugin-next'
@@ -16,7 +15,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y'
 // @ts-expect-error there are no type definitions for this
 import importPlugin from 'eslint-plugin-import'
 import { FlatCompat } from '@eslint/eslintrc'
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat'
+import { fixupPluginRules } from '@eslint/compat'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { type Linter, type ESLint } from 'eslint'
@@ -171,6 +170,20 @@ const reactHooksRecommended = {
 } satisfies Config
 
 /**
+ * Since eslint-plugin-react-hooks@6.0.0-rc.1,  eslint-plugin-react-compiler was merged into eslint-plugin-react-hooks.
+ * @see {@link https://react.dev/blog/2025/04/21/react-compiler-rc}
+ */
+
+const reactCompilerRecommended = {
+  ...reactHooks.configs['recommended-latest'],
+  name: 'react/compiler',
+  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
+  rules: {
+    'react-hooks/react-compiler': 'warn',
+  },
+} satisfies Config
+
+/**
  * This plugin Validate that your components can safely be updated with Fast Refresh or hot reloading.
  * This configuration is the same as the recommended config with the addition of adding the files property as well as a name for the config.
  * @see {@link https://github.com/ArnaudBarre/eslint-plugin-react-refresh?tab=readme-ov-file#recommended-config}
@@ -179,30 +192,6 @@ const reactRefreshRecommended = {
   name: 'react-refresh/recommended',
   files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
   ...reactRefresh.configs.recommended,
-} satisfies Config
-
-/**
- * This ESLint plugin will display any violations of the rules of React in your editor. When it does this, it means that the compiler has skipped over optimizing that component or hook. This is perfectly okay, and the compiler can recover and continue optimizing other components in your codebase.
-
- * The current recommended ways of implementing this plugin are:
- * {@link https://react.dev/learn/react-compiler#installing-eslint-plugin-react-compiler}
- * {@link https://github.com/facebook/react/tree/main/compiler/packages/eslint-plugin-react-compiler}
- * However, as of 'eslint-plugin-react-compiler' v19.0.0-beta-714736e-20250131 and 'eslint' v9.19.0, there is a bug in both recommended ways of using this plugin.
- * The current workaround I found is to use the FlatCompat utility to patch the config from .eslintrc deprecated config styles.
- * Currently the plugin throw a TypeError: Cannot read properties of undefined (reading 'configs') when running eslint
-
- */
-const [compilerConfigCompat] = compat.config({
-  plugins: ['react-compiler'],
-  rules: {
-    'react-compiler/react-compiler': 'error',
-  },
-})
-
-const reactCompilerRecommended = {
-  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
-  ...compilerConfigCompat,
-  name: 'react-compiler/recommended',
 } satisfies Config
 
 /**
@@ -395,16 +384,6 @@ const vitestDisableTypeChecked = {
 } satisfies Config
 
 /**
- * 'eslint-plugin-testing-library' is a plugin that provides linting rules for testing with testing-library. In this case we are using it for react-testing-library with their recommended configuration:
- * @see {@link https://github.com/testing-library/eslint-plugin-testing-library?tab=readme-ov-file#react}
- */
-const testingLibraryRecommended = {
-  name: 'testing-library/recommended',
-  files: [...TEST_FILE_PATTERNS],
-  ...testingLibrary.configs['flat/react'],
-}
-
-/**
  * 'eslint-plugin-jest-dom' is a plugin to follow best practices and anticipate common mistakes when writing tests with jest-dom.
  * We are following the their recommended configuration:
  * @see {@link https://github.com/testing-library/eslint-plugin-jest-dom?tab=readme-ov-file#recommended-configuration}
@@ -490,8 +469,8 @@ const eslintConfig = [
   reactRecommended,
   reactJsxRuntime,
   reactHooksRecommended,
+  reactCompilerRecommended,
   reactRefreshRecommended,
-  // reactCompilerRecommended,
 
   jsxA11yRecommended,
 
@@ -502,8 +481,7 @@ const eslintConfig = [
   coreWebVitals,
   vitestRecommended,
   vitestDisableTypeChecked,
-  // testingLibraryRecommended,
-  // jestDomRecommended,
+  jestDomRecommended,
   prettierRecommended,
   {
     name: 'custom-config',
