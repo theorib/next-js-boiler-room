@@ -1,12 +1,7 @@
 'use client'
 
 import type * as React from 'react'
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronUpIcon,
-} from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 
 import { cn } from '@/lib/utils'
@@ -73,16 +68,16 @@ function Chevron({
   orientation = 'left',
   className,
   ...props
-}: React.ComponentProps<typeof ChevronLeftIcon>) {
+}: React.ComponentProps<typeof ChevronLeft>) {
   switch (orientation) {
     case 'left':
-      return <ChevronLeftIcon className={cn('h-4 w-4', className)} {...props} />
+      return <ChevronLeft className={cn('h-4 w-4', className)} {...props} />
     case 'right':
-      return <ChevronRightIcon className={cn('h-4 w-4', className)} />
+      return <ChevronRight className={cn('h-4 w-4', className)} />
     case 'up':
-      return <ChevronUpIcon className={cn('h-4 w-4', className)} />
+      return <ChevronUp className={cn('h-4 w-4', className)} />
     case 'down':
-      return <ChevronDownIcon className={cn('h-4 w-4', className)} />
+      return <ChevronDown className={cn('h-4 w-4', className)} />
     default:
       return null
   }
