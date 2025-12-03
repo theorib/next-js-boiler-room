@@ -8,11 +8,11 @@ import * as reactHooks from 'eslint-plugin-react-hooks'
 import prettier from 'eslint-config-prettier'
 import vitest from '@vitest/eslint-plugin'
 import jestDom from 'eslint-plugin-jest-dom'
-// @ts-expect-error there are no type definitions for this
+
 import next from '@next/eslint-plugin-next'
 import globals from 'globals'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
-// @ts-expect-error there are no type definitions for this
+
 import importPlugin from 'eslint-plugin-import'
 import { FlatCompat } from '@eslint/eslintrc'
 import { fixupPluginRules } from '@eslint/compat'
@@ -138,7 +138,6 @@ const reactRecommended = {
         modules: true,
         jsx: true,
       },
-      project: true, // change this to your project's tsconfig.json
       jsxPragma: null, // useful for typescript x react@17 https://github.com/jsx-eslint/eslint-plu
     },
     globals: {
@@ -162,25 +161,13 @@ const reactJsxRuntime = {
 /**
  * This eslint plugin enforces React's Rule of Hooks
  * @see {@link https://react.dev/reference/rules/rules-of-hooks}
+ * Since eslint-plugin-react-hooks@6.0.0-rc.1,  eslint-plugin-react-compiler was merged into eslint-plugin-react-hooks.
+ * @see {@link https://react.dev/blog/2025/04/21/react-compiler-rc}
  * This configuration follows the plugin's latest recommended rules with the addition of adding the files property for narrowing down the files that should be linted.
  */
 const reactHooksRecommended = {
-  ...reactHooks.configs['recommended-latest'],
+  ...reactHooks.configs.flat.recommended,
   files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
-} satisfies Config
-
-/**
- * Since eslint-plugin-react-hooks@6.0.0-rc.1,  eslint-plugin-react-compiler was merged into eslint-plugin-react-hooks.
- * @see {@link https://react.dev/blog/2025/04/21/react-compiler-rc}
- */
-
-const reactCompilerRecommended = {
-  ...reactHooks.configs['recommended-latest'],
-  name: 'react/compiler',
-  files: [...JS_JSX_TS_TSX_FILE_PATTERNS],
-  rules: {
-    'react-hooks/react-compiler': 'warn',
-  },
 } satisfies Config
 
 /**
@@ -230,7 +217,7 @@ const nextNextRecommended = {
   },
 
   rules: {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- This is a bug in eslint-plugin-next
+     
     ...(next.configs.recommended.rules as ConfigRules),
   },
   files: [...NEXT_JS_JSX_TS_TSX_FILE_PATTERNS],
@@ -265,7 +252,6 @@ const configNext = {
       ...globals.node,
     },
     parserOptions: {
-      project: true,
       tsconfigRootDir: import.meta.dirname,
       sourceType: 'module',
       ecmaFeatures: {
@@ -469,7 +455,6 @@ const eslintConfig = [
   reactRecommended,
   reactJsxRuntime,
   reactHooksRecommended,
-  reactCompilerRecommended,
   reactRefreshRecommended,
 
   jsxA11yRecommended,
