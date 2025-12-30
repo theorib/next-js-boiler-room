@@ -217,7 +217,6 @@ const nextNextRecommended = {
   },
 
   rules: {
-     
     ...(next.configs.recommended.rules as ConfigRules),
   },
   files: [...NEXT_JS_JSX_TS_TSX_FILE_PATTERNS],
@@ -504,7 +503,14 @@ const eslintConfig = [
         { allowConstantExport: true },
       ],
       '@typescript-eslint/array-type': ['error', { default: 'generic' }],
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       '@typescript-eslint/no-floating-promises': [
         'error',
         {
