@@ -75,19 +75,19 @@
     "react": "19.2.3",
     "react-day-picker": "9.13.0",
     "react-dom": "19.2.3",
-    "react-hook-form": "^7.69.0",
-    "react-resizable-panels": "^4.1.0",
+    "react-hook-form": "^7.70.0",
+    "react-resizable-panels": "^4.3.0",
     "recharts": "^3.6.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "zod": "^4.2.1"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.2.0",
-    "@commitlint/cz-commitlint": "^20.2.0",
+    "@commitlint/cli": "^20.3.0",
+    "@commitlint/cz-commitlint": "^20.3.0",
     "@eslint/compat": "^2.0.0",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
@@ -102,13 +102,13 @@
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.51.0",
-    "@typescript-eslint/utils": "^8.51.0",
+    "@typescript-eslint/eslint-plugin": "^8.52.0",
+    "@typescript-eslint/utils": "^8.52.0",
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/browser": "^4.0.16",
     "@vitest/browser-playwright": "^4.0.16",
     "@vitest/coverage-v8": "^4.0.16",
-    "@vitest/eslint-plugin": "^1.6.4",
+    "@vitest/eslint-plugin": "^1.6.6",
     "@vitest/ui": "^4.0.16",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
     "commitizen": "^4.3.1",
@@ -136,7 +136,7 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.51.0",
+    "typescript-eslint": "^8.52.0",
     "vite-tsconfig-paths": "^6.0.3",
     "vitest": "4.0.16",
     "vitest-browser-react": "^2.0.2"
@@ -151,7 +151,10 @@
       "msw",
       "sharp",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "tmp": ">=0.2.4"
+    }
   },
   "overrides": {
     "react": "^19.0.0",
