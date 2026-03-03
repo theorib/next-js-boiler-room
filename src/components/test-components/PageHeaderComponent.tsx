@@ -1,4 +1,4 @@
-import DarkModeSwitchBtn from '@/components/test-components/DarkModeSwitchBtn';
+import DarkModeSwitchBtn from '@/components/test-components/DarkModeSwitchBtn'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,10 +6,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
-import { SidebarTrigger } from '@/components/ui/sidebar';
-import Link from 'next/link';
+} from '@/components/ui/breadcrumb'
+import { Separator } from '@/components/ui/separator'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import Link from 'next/link'
 export default function PageHeaderComponent() {
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b">
@@ -34,5 +34,5 @@ export default function PageHeaderComponent() {
         <DarkModeSwitchBtn />
       </div>
     </header>
-  );
+  )
 }

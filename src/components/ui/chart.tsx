@@ -112,6 +112,8 @@ const ChartTooltipContent = React.forwardRef<
       indicator?: 'line' | 'dot' | 'dashed'
       nameKey?: string
       labelKey?: string
+      payload?: ReadonlyArray<unknown>
+      label?: React.ReactNode
     }
 >(
   (
@@ -139,7 +141,11 @@ const ChartTooltipContent = React.forwardRef<
         return null
       }
 
-      const item = payload[0] as { dataKey?: string; name?: string; payload?: unknown }
+      const item = payload[0] as {
+        dataKey?: string
+        name?: string
+        payload?: unknown
+      }
       const key = `${labelKey || item.dataKey || item.name || 'value'}`
       const itemConfig = getPayloadConfigFromPayload(config, item, key)
       const value =
@@ -150,7 +156,10 @@ const ChartTooltipContent = React.forwardRef<
       if (labelFormatter) {
         return (
           <div className={cn('font-medium', labelClassName)}>
-            {labelFormatter(value, payload as Parameters<NonNullable<typeof labelFormatter>>[1])}
+            {labelFormatter(
+              value,
+              payload as Parameters<NonNullable<typeof labelFormatter>>[1],
+            )}
           </div>
         )
       }
@@ -188,11 +197,11 @@ const ChartTooltipContent = React.forwardRef<
         <div className="grid gap-1.5">
           {payload.map((item: unknown, index: number) => {
             const payloadItem = item as {
-              name?: string;
-              dataKey?: string;
-              value?: number | string;
-              color?: string;
-              payload?: { fill?: string };
+              name?: string
+              dataKey?: string
+              value?: number | string
+              color?: string
+              payload?: { fill?: string }
             }
             const key = `${nameKey || payloadItem.name || payloadItem.dataKey || 'value'}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
@@ -207,13 +216,15 @@ const ChartTooltipContent = React.forwardRef<
                   indicator === 'dot' && 'items-center',
                 )}
               >
-                {formatter && payloadItem?.value !== undefined && payloadItem.name ? (
+                {formatter &&
+                payloadItem?.value !== undefined &&
+                payloadItem.name ? (
                   formatter(
                     payloadItem.value,
                     payloadItem.name,
-                    payloadItem,
+                    payloadItem as Parameters<NonNullable<typeof formatter>>[2],
                     index,
-                    payload as Parameters<NonNullable<typeof formatter>>[4]
+                    payload as Parameters<NonNullable<typeof formatter>>[4],
                   )
                 ) : (
                   <>
@@ -278,7 +289,10 @@ const ChartLegend = RechartsPrimitive.Legend
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'> &
-    Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign'> & {
+    Pick<
+      RechartsPrimitive.DefaultLegendContentProps,
+      'payload' | 'verticalAlign'
+    > & {
       hideIcon?: boolean
       nameKey?: string
     }
@@ -304,16 +318,17 @@ const ChartLegendContent = React.forwardRef<
       >
         {(payload as Array<unknown>).map((item: unknown, index: number) => {
           const legendItem = item as {
-            dataKey?: string;
-            value?: string | number;
-            color?: string;
-            payload?: { value?: string };
+            dataKey?: string
+            value?: string | number
+            color?: string
+            payload?: { value?: string }
           }
           const key = `${nameKey || legendItem.dataKey || 'value'}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
           const keyValue =
-            typeof legendItem.value === 'string' || typeof legendItem.value === 'number'
+            typeof legendItem.value === 'string' ||
+            typeof legendItem.value === 'number'
               ? legendItem.value.toString()
               : legendItem.payload?.value || `legend-item-${index}`
 
