@@ -7,7 +7,7 @@ type StaticRequire = { default: StaticImageData }
 function toSrcString(src: ImageProps['src']): string {
   if (typeof src === 'string') return src
   if ('default' in src) return (src as StaticRequire).default.src
-  return (src as StaticImageData).src
+  return (src).src
 }
 
 function MockNextImage({
