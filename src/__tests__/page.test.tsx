@@ -1,6 +1,9 @@
 import { expect, test, describe } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 import { render } from 'vitest-browser-react'
+import mockNextImage from '@/testUtils/mockNextImage'
+
+vi.mock('next/image', () => mockNextImage)
 
 import HomePage from '@/app/page'
 import { Suspense } from 'react'
